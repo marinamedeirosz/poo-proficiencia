@@ -34,4 +34,18 @@ public class Formatter {
         }
         return phone.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll("-", "");
     }
+
+    public static String formatCrm(String crm) {
+        if (crm == null || crm.isEmpty()) {
+            return "";
+        }
+        return crm.replaceAll("(\\d{2})(\\d{4})(\\d{1})", "$1/$2-$3");
+    }
+
+    public static String unformatCrm(String crm) {
+        if (crm == null || crm.isEmpty()) {
+            return "";
+        }
+        return crm.replaceAll("\\/", "").replaceAll("-", "");
+    }
 }

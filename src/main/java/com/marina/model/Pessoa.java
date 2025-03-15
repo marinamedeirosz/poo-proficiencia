@@ -11,18 +11,6 @@ public class Pessoa extends BaseEntity {
     private String profile;            // 'P' - Paciente, 'M' - Médico
     private String situation;          // 'A' - Ativo, 'I' - Inativo
     private String userAutomation;     // 'S' - Sim, 'N' - Não
-    private String crm;                //  Somente médicos possuem CRM
-
-    public Pessoa(int id, Date createdDate, String name, String cpf, String phone, String profile, String situation, String userAutomation, String crm) {
-        super(id, createdDate);
-        this.name = name;
-        this.cpf = cpf;
-        this.phone = phone;
-        this.profile = profile;
-        this.situation = situation;
-        this.userAutomation = userAutomation;
-        this.crm = crm;
-    }
 
     public Pessoa(int id, Date createdDate, String name, String cpf, String phone, String profile, String situation, String userAutomation) {
         super(id, createdDate);
@@ -80,14 +68,6 @@ public class Pessoa extends BaseEntity {
 
     public void setUserAutomation(String userAutomation) {
         this.userAutomation = userAutomation;
-    }
-
-    public String getCrm() {
-        return crm;
-    }
-
-    public void setCrm(String crm) {
-        this.crm = crm;
     }
 
     @Override

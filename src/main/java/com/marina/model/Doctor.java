@@ -2,11 +2,11 @@ package com.marina.model;
 
 import com.marina.util.Formatter;
 
-public class Medico extends Pessoa {
+public class Doctor extends Person {
     private String crm;
 
-    public Medico(String name, String cpf, String phone, String profile, String situation, String userAutomation, String crm) {
-        super(name, cpf, phone, profile, situation, userAutomation);
+    public Doctor(String name, String cpf, String phone, String profile, String status, String userAutomation, String crm) {
+        super(name, cpf, phone, profile, status, userAutomation);
         this.crm = crm;
     }
 
@@ -19,7 +19,7 @@ public class Medico extends Pessoa {
     }
 
     @Override
-    public String toString() {
+    public String getDetails() {
         return "Médico: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone()) + ", CRM: " + Formatter.formatCrm(crm);
     }
 }

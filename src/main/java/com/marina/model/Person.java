@@ -2,22 +2,24 @@ package com.marina.model;
 
 import com.marina.util.Formatter;
 
-public class Pessoa {
+public abstract class Person {
     private String name;
     private String cpf;
     private String phone;
     private String profile;            // 'P' - Paciente, 'M' - Médico
-    private String situation;          // 'A' - Ativo, 'I' - Inativo
+    private String status;             // 'A' - Ativo, 'I' - Inativo
     private String userAutomation;     // 'S' - Sim, 'N' - Não
 
-    public Pessoa(String name, String cpf, String phone, String profile, String situation, String userAutomation) {
+    public Person(String name, String cpf, String phone, String profile, String status, String userAutomation) {
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;
         this.profile = profile != null ? profile : "P";
-        this.situation = situation != null ? situation : "A";
+        this.status = status != null ? status : "A";
         this.userAutomation = userAutomation != null ? userAutomation : "S";
     }
+
+    public abstract String getDetails();
 
     public String getName() {
         return name;
@@ -51,12 +53,12 @@ public class Pessoa {
         this.profile = profile;
     }
 
-    public String getSituation() {
-        return situation;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSituation(String situation) {
-        this.situation = situation;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUserAutomation() {

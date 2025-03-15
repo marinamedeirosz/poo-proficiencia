@@ -1,10 +1,8 @@
 package com.marina.model;
 
-import java.util.Date;
-
 import com.marina.util.Formatter;
 
-public class Pessoa extends BaseEntity {
+public class Pessoa {
     private String name;
     private String cpf;
     private String phone;
@@ -12,14 +10,13 @@ public class Pessoa extends BaseEntity {
     private String situation;          // 'A' - Ativo, 'I' - Inativo
     private String userAutomation;     // 'S' - Sim, 'N' - Não
 
-    public Pessoa(int id, Date createdDate, String name, String cpf, String phone, String profile, String situation, String userAutomation) {
-        super(id, createdDate);
+    public Pessoa(String name, String cpf, String phone, String profile, String situation, String userAutomation) {
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;
-        this.profile = profile;
-        this.situation = situation;
-        this.userAutomation = userAutomation;
+        this.profile = profile != null ? profile : "P";
+        this.situation = situation != null ? situation : "A";
+        this.userAutomation = userAutomation != null ? userAutomation : "S";
     }
 
     public String getName() {
@@ -71,12 +68,7 @@ public class Pessoa extends BaseEntity {
     }
 
     @Override
-    public String getEntityDetails() {
-        return "Pessoa: " + name + ", CPF: " + Formatter.formatCpf(cpf);
-    }
-
-    @Override
     public String toString() {
-        return getEntityDetails();
+        return "Pessoa: " + name + ", CPF: " + Formatter.formatCpf(cpf);
     }
 }

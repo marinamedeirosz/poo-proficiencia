@@ -3,13 +3,13 @@ package com.marina.config;
 public class AppConfig {
     private static AppConfig instance;
     private final String baseUrl;
-    private final int ConnectionTimeout;
-    private final int ReadTimeout;
+    private final int connectionTimeout;
+    private final int readTimeout;
 
     private AppConfig() {
         this.baseUrl = "https://your-apex-server/ords/your-schema/";
-        this.ConnectionTimeout = 5000;
-        this.ReadTimeout = 5000;
+        this.connectionTimeout = 5000;
+        this.readTimeout = 5000;
     }
 
     public static AppConfig getInstance() {
@@ -24,10 +24,10 @@ public class AppConfig {
     }
 
     public int getConnectionTimeout() {
-        return ConnectionTimeout;
+        return connectionTimeout;
     }
     
     public int getReadTimeout() {
-        return ReadTimeout;
+        return readTimeout;
     }
 }

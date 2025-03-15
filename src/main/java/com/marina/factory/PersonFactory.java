@@ -8,7 +8,7 @@ import com.marina.model.Doctor;
 import com.marina.model.Patient;
 import com.marina.model.Person;
 
-public class PessoaFactory {
+public class PersonFactory {
 
     public static Person createPessoa(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation, String crm) {
        switch (profile) {

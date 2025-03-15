@@ -1,5 +1,10 @@
 package com.marina.util;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class Formatter {
     public static String formatCpf(String cpf) {
         if (cpf == null || cpf.isEmpty()) {
@@ -48,4 +53,15 @@ public class Formatter {
         }
         return crm.replaceAll("\\/", "").replaceAll("-", "");
     }
+
+    public static String formatDate(Date date) {
+        if (date == null) {
+            return "";
+        }
+        LocalDateTime localDateTime = date.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDateTime();
+        return localDateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+    
 }

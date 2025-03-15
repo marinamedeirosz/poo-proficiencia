@@ -2,21 +2,19 @@ package com.marina.dao;
 
 import java.io.IOException;
 
-import com.marina.enums.Profile;
-import com.marina.enums.Status;
-import com.marina.enums.YesOrNo;
+import com.marina.model.Patient;
 
 public class PatientDao {
     private static final String ENDPOINT = "pessoa";
 
-    public static String createPatient(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation) throws IOException {
+    public static String createPatient(Patient patient) throws IOException {
         String jsonData = "{"
-                + "\"name\": \"" + name + "\","
-                + "\"cpf\": \"" + cpf + "\","
-                + "\"phone\": \"" + phone + "\","
-                + "\"profile\": \"" + profile.getCode() + "\","
-                + "\"status\": \"" + status.getCode() + "\","
-                + "\"userAutomation\": \"" + userAutomation.getCode() + "\""
+                + "\"name\": \"" + patient.getName() + "\","
+                + "\"cpf\": \"" + patient.getCpf() + "\","
+                + "\"phone\": \"" + patient.getPhone() + "\","
+                + "\"profile\": \"" + patient.getProfile().getCode() + "\","
+                + "\"status\": \"" + patient.getStatus().getCode() + "\","
+                + "\"userAutomation\": \"" + patient.getUserAutomation().getCode() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
@@ -25,14 +23,14 @@ public class PatientDao {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + cpf);
     }
 
-    public static void updatePatient(String name, String cpf, String phone, Status status, YesOrNo userAutomation) throws IOException {
+    public static void updatePatient(Patient patient) throws IOException {
         String jsonData = "{"
-                + "\"name\": \"" + name + "\","
-                + "\"phone\": \"" + phone + "\","
-                + "\"status\": \"" + status.getCode() + "\","
-                + "\"userAutomation\": \"" + userAutomation.getCode() + "\""
+                + "\"name\": \"" + patient.getName() + "\","
+                + "\"phone\": \"" + patient.getPhone() + "\","
+                + "\"status\": \"" + patient.getStatus().getCode() + "\","
+                + "\"userAutomation\": \"" + patient.getUserAutomation().getCode() + "\""
                 + "}";
-        ConnectionDao.makePutRequest(ENDPOINT + "/" + cpf, jsonData);
+        ConnectionDao.makePutRequest(ENDPOINT + "/" + patient.getCpf(), jsonData);
     }
     
     public static void deletePatient(String cpf) throws IOException {

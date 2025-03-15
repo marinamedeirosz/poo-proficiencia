@@ -2,21 +2,19 @@ package com.marina.dao;
 
 import java.io.IOException;
 
-import com.marina.enums.Profile;
-import com.marina.enums.Status;
-import com.marina.enums.YesOrNo;
+import com.marina.model.Doctor;
 
 public class DoctorDao {
     private static final String ENDPOINT = "pessoa";
 
-    public static String createDoctor(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation) throws IOException {
+    public static String createDoctor(Doctor doc) throws IOException {
         String jsonData = "{"
-                + "\"name\": \"" + name + "\","
-                + "\"cpf\": \"" + cpf + "\","
-                + "\"phone\": \"" + phone + "\","
-                + "\"profile\": \"" + profile.getCode() + "\","
-                + "\"status\": \"" + status.getCode() + "\","
-                + "\"userAutomation\": \"" + userAutomation.getCode() + "\""
+                + "\"name\": \"" + doc.getName() + "\","
+                + "\"cpf\": \"" + doc.getCpf() + "\","
+                + "\"phone\": \"" + doc.getPhone() + "\","
+                + "\"profile\": \"" + doc.getProfile().getCode() + "\","
+                + "\"status\": \"" + doc.getStatus().getCode() + "\","
+                + "\"userAutomation\": \"" + doc.getUserAutomation().getCode() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
@@ -25,15 +23,15 @@ public class DoctorDao {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + cpf);
     }
     
-    public static void updateDoctor(String name, String cpf, String phone, Status status, YesOrNo userAutomation, String crm) throws IOException {
+    public static void updateDoctor(Doctor doc) throws IOException {
         String jsonData = "{"
-                + "\"name\": \"" + name + "\","
-                + "\"phone\": \"" + phone + "\","
-                + "\"status\": \"" + status.getCode() + "\","
-                + "\"userAutomation\": \"" + userAutomation.getCode() + "\","
-                + "\"crm\": \"" + crm + "\""
+                + "\"name\": \"" + doc.getName() + "\","
+                + "\"phone\": \"" + doc.getPhone() + "\","
+                + "\"status\": \"" + doc.getStatus().getCode() + "\","
+                + "\"userAutomation\": \"" + doc.getUserAutomation().getCode() + "\","
+                + "\"crm\": \"" + doc.getCrm() + "\""
                 + "}";
-        ConnectionDao.makePutRequest(ENDPOINT + "/" + cpf, jsonData);
+        ConnectionDao.makePutRequest(ENDPOINT + "/" + doc.getCpf(), jsonData);
     }
     
     public static void deleteDoctor(String cpf) throws IOException {

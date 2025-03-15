@@ -1,16 +1,17 @@
 package com.marina.dao;
 
 import java.io.IOException;
-import java.util.Date;
+
+import com.marina.model.Appointment;
 
 public class AppointmentDao {
     private static final String ENDPOINT = "consulta";
 
-    public static String createAppointment(String doctorCpf, String patientCpf, Date date) throws IOException {
+    public static String createAppointment(Appointment appointment) throws IOException {
         String jsonData = "{"
-                + "\"doctorCpf\": \"" + doctorCpf + "\","
-                + "\"patientCpf\": \"" + patientCpf + "\","
-                + "\"date\": \"" + date + "\""
+                + "\"doctorCpf\": \"" + appointment.getDoctor().getCpf() + "\","
+                + "\"patientCpf\": \"" + appointment.getPatient().getCpf() + "\","
+                + "\"date\": \"" + appointment.getDate() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
@@ -19,11 +20,11 @@ public class AppointmentDao {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + id);
     }
     
-    public static void updateAppointment(String id, String doctorCpf, String patientCpf, String date) throws IOException {
+    public static void updateAppointment(String id, Appointment appointment) throws IOException {
         String jsonData = "{"
-                + "\"doctorCpf\": \"" + doctorCpf + "\","
-                + "\"patientCpf\": \"" + patientCpf + "\","
-                + "\"date\": \"" + date + "\""
+                + "\"doctorCpf\": \"" + appointment.getDoctor().getCpf() + "\","
+                + "\"patientCpf\": \"" + appointment.getPatient().getCpf() + "\","
+                + "\"date\": \"" + appointment.getDate() + "\""
                 + "}";
         ConnectionDao.makePutRequest(ENDPOINT + "/" + id, jsonData);    
     }

@@ -6,10 +6,10 @@ import com.marina.enums.Profile;
 import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
 
-public class PatientDao {
+public class DoctorDao {
     private static final String ENDPOINT = "pessoa";
 
-    public static String createPatient(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation) throws IOException {
+    public static String createDoctor(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + name + "\","
                 + "\"cpf\": \"" + cpf + "\","
@@ -21,21 +21,22 @@ public class PatientDao {
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
 
-    public static String getPatient(String cpf) throws IOException {
+    public static String getDoctor(String cpf) throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + cpf);
     }
-
-    public static void updatePatient(String name, String cpf, String phone, Status status, YesOrNo userAutomation) throws IOException {
+    
+    public static void updateDoctor(String name, String cpf, String phone, Status status, YesOrNo userAutomation, String crm) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + name + "\","
                 + "\"phone\": \"" + phone + "\","
                 + "\"status\": \"" + status.getCode() + "\","
-                + "\"userAutomation\": \"" + userAutomation.getCode() + "\""
+                + "\"userAutomation\": \"" + userAutomation.getCode() + "\","
+                + "\"crm\": \"" + crm + "\""
                 + "}";
         ConnectionDao.makePutRequest(ENDPOINT + "/" + cpf, jsonData);
     }
     
-    public static void deletePatient(String cpf) throws IOException {
+    public static void deleteDoctor(String cpf) throws IOException {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + cpf);
     }
 }

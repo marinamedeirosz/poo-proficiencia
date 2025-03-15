@@ -64,4 +64,12 @@ public class Formatter {
         return localDateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
     
+    public static Date parseDate(String dateString) {
+        if (dateString == null || dateString.isEmpty()) {
+            return null;
+        }
+        return Date.from(LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+            .atZone(ZoneId.systemDefault())
+            .toInstant());
+    }
 }

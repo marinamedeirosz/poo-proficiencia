@@ -1,22 +1,25 @@
 package com.marina.model;
 
-import com.marina.util.Formatter;
+import com.marina.enums.Profile;
+import com.marina.enums.Status;
+import com.marina.enums.YesOrNo;
+import com.marina.utils.Formatter;
 
 public abstract class Person {
     private String name;
     private String cpf;
     private String phone;
-    private String profile;            // 'P' - Paciente, 'M' - Médico
-    private String status;             // 'A' - Ativo, 'I' - Inativo
-    private String userAutomation;     // 'S' - Sim, 'N' - Não
+    private Profile profile;           // 'P' - Paciente, 'M' - Médico
+    private Status status;             // 'A' - Ativo, 'I' - Inativo
+    private YesOrNo userAutomation;     // 'S' - Sim, 'N' - Não
 
-    public Person(String name, String cpf, String phone, String profile, String status, String userAutomation) {
+    public Person(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation) {
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;
-        this.profile = profile != null ? profile : "P";
-        this.status = status != null ? status : "A";
-        this.userAutomation = userAutomation != null ? userAutomation : "S";
+        this.profile = profile != null ? profile : Profile.PACIENTE;
+        this.status = status != null ? status : Status.ATIVO;
+        this.userAutomation = userAutomation != null ? userAutomation : YesOrNo.SIM;
     }
 
     public abstract String getDetails();
@@ -45,27 +48,27 @@ public abstract class Person {
         this.phone = phone;
     }
 
-    public String getProfile() {
+    public Profile getProfile() {
         return profile;
     }
 
-    public void setProfile(String profile) {
+    public void setProfile(Profile profile) {
         this.profile = profile;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public String getUserAutomation() {
+    public YesOrNo getUserAutomation() {
         return userAutomation;
     }
 
-    public void setUserAutomation(String userAutomation) {
+    public void setUserAutomation(YesOrNo userAutomation) {
         this.userAutomation = userAutomation;
     }
 

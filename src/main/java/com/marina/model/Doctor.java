@@ -1,11 +1,14 @@
 package com.marina.model;
 
-import com.marina.util.Formatter;
+import com.marina.enums.Profile;
+import com.marina.enums.Status;
+import com.marina.enums.YesOrNo;
+import com.marina.utils.Formatter;
 
 public class Doctor extends Person {
     private String crm;
 
-    public Doctor(String name, String cpf, String phone, String profile, String status, String userAutomation, String crm) {
+    public Doctor(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation, String crm) {
         super(name, cpf, phone, profile, status, userAutomation);
         this.crm = crm;
     }

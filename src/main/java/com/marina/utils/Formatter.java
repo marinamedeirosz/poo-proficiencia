@@ -1,4 +1,4 @@
-package com.marina.util;
+package com.marina.utils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

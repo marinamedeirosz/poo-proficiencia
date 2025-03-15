@@ -1,4 +1,4 @@
-package com.marina.util;
+package com.marina.utils;
 
 import com.marina.exception.InvalidCpfException;
 

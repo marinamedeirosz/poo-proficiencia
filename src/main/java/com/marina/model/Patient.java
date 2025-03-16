@@ -19,4 +19,9 @@ public class Patient extends Person {
     public String getDetails() {
         return "Paciente: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone());
     }
+
+    @Override
+    public String toString() {
+        return getDetails();
+    }
 }

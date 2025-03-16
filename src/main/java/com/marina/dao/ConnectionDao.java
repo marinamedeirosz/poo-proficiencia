@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import com.marina.config.AppConfig;
+import com.marina.utils.JsonParser;
 
 public class ConnectionDao {
 
@@ -70,7 +71,7 @@ public class ConnectionDao {
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 throw new IOException("Error in POST request: " + responseCode);
             }
-            return response.toString();
+            return JsonParser.extractMessage(response.toString());
         } catch (IOException e) {
             throw new IOException("Error in POST request: " + e.getMessage(), e);
         }

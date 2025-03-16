@@ -1,5 +1,9 @@
 package com.marina.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.marina.exception.InvalidStatusException;
+
 public enum Status {
     ATIVO("A"),  
     INATIVO("I");
@@ -14,8 +18,19 @@ public enum Status {
         return code;
     }
 
+    @JsonValue
     @Override
     public String toString() {
         return code;
+    }
+
+    @JsonCreator
+    public static Status fromValue(String value) {
+        for (Status status : Status.values()) {
+            if (status.code.equals(value)) {
+                return status;
+            }
+        }
+        throw new InvalidStatusException(value);
     }
 }

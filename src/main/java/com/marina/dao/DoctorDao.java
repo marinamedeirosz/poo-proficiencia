@@ -12,9 +12,9 @@ public class DoctorDao {
                 + "\"name\": \"" + doc.getName() + "\","
                 + "\"cpf\": \"" + doc.getCpf() + "\","
                 + "\"phone\": \"" + doc.getPhone() + "\","
-                + "\"profile\": \"" + doc.getProfile().getCode() + "\","
-                + "\"status\": \"" + doc.getStatus().getCode() + "\","
-                + "\"userAutomation\": \"" + doc.getUserAutomation().getCode() + "\""
+                + "\"profile\": \"" + doc.getProfile().getValue() + "\","
+                + "\"status\": \"" + doc.getStatus().toString() + "\","
+                + "\"userAutomation\": \"" + doc.getUserAutomation().toString() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
@@ -27,8 +27,8 @@ public class DoctorDao {
         String jsonData = "{"
                 + "\"name\": \"" + doc.getName() + "\","
                 + "\"phone\": \"" + doc.getPhone() + "\","
-                + "\"status\": \"" + doc.getStatus().getCode() + "\","
-                + "\"userAutomation\": \"" + doc.getUserAutomation().getCode() + "\","
+                + "\"status\": \"" + doc.getStatus().toString() + "\","
+                + "\"userAutomation\": \"" + doc.getUserAutomation().toString() + "\","
                 + "\"crm\": \"" + doc.getCrm() + "\""
                 + "}";
         ConnectionDao.makePutRequest(ENDPOINT + "/" + doc.getCpf(), jsonData);
@@ -36,5 +36,9 @@ public class DoctorDao {
     
     public static void deleteDoctor(String cpf) throws IOException {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + cpf);
+    }
+
+    public static String listDoctors() throws IOException {
+        return ConnectionDao.makeGetRequest(ENDPOINT);
     }
 }

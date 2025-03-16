@@ -1,21 +1,31 @@
 package com.marina.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.marina.exception.InvalidProfileException;
+
 public enum Profile {
     MEDICO("M"),
     PACIENTE("P");
 
-    private final String code;
+    private final String value;
 
-    Profile(String code) {
-        this.code = code;
+    Profile(String value) {
+        this.value = value;
     }
 
-    public String getCode() {
-        return code;
+    @JsonValue
+    public String getValue() {
+        return value;
     }
 
-    @Override
-    public String toString() {
-        return code;
+    @JsonCreator
+    public static Profile fromValue(String value) {
+        for (Profile profile : Profile.values()) {
+            if (profile.value.equals(value)) {
+                return profile;
+            }
+        }
+        throw new InvalidProfileException(value);
     }
 }

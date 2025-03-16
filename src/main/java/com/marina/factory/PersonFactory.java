@@ -10,7 +10,7 @@ import com.marina.model.Person;
 
 public class PersonFactory {
 
-    public static Person createPessoa(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation, String crm) {
+    public static Person createPerson(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation, String crm) {
        switch (profile) {
             case MEDICO:
                 return new Doctor(name, cpf, phone, profile, status, userAutomation, crm);

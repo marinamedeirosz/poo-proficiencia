@@ -11,6 +11,10 @@ public class Patient extends Person {
         super(name, cpf, phone, profile, status, userAutomation);
     }
 
+    public Patient() {
+        super();
+    }
+
     @Override
     public String getDetails() {
         return "Paciente: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone());

@@ -1,5 +1,6 @@
 package com.marina.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.marina.enums.Profile;
 import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
@@ -11,7 +12,16 @@ public abstract class Person {
     private String phone;
     private Profile profile;           // 'P' - Paciente, 'M' - Médico
     private Status status;             // 'A' - Ativo, 'I' - Inativo
+    
+    @JsonProperty("userautomation")
     private YesOrNo userAutomation;     // 'S' - Sim, 'N' - Não
+
+
+    public Person() {
+        this.profile = Profile.PACIENTE;
+        this.status = Status.ATIVO;
+        this.userAutomation = YesOrNo.SIM;
+    }
 
     public Person(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation) {
         this.name = name;

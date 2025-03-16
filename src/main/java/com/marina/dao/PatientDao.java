@@ -5,16 +5,16 @@ import java.io.IOException;
 import com.marina.model.Patient;
 
 public class PatientDao {
-    private static final String ENDPOINT = "pessoa";
+    private static final String ENDPOINT = "paciente";
 
     public static String createPatient(Patient patient) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + patient.getName() + "\","
                 + "\"cpf\": \"" + patient.getCpf() + "\","
                 + "\"phone\": \"" + patient.getPhone() + "\","
-                + "\"profile\": \"" + patient.getProfile().getCode() + "\","
-                + "\"status\": \"" + patient.getStatus().getCode() + "\","
-                + "\"userAutomation\": \"" + patient.getUserAutomation().getCode() + "\""
+                + "\"profile\": \"" + patient.getProfile().getValue() + "\","
+                + "\"status\": \"" + patient.getStatus().toString() + "\","
+                + "\"userAutomation\": \"" + patient.getUserAutomation().toString() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
@@ -27,13 +27,17 @@ public class PatientDao {
         String jsonData = "{"
                 + "\"name\": \"" + patient.getName() + "\","
                 + "\"phone\": \"" + patient.getPhone() + "\","
-                + "\"status\": \"" + patient.getStatus().getCode() + "\","
-                + "\"userAutomation\": \"" + patient.getUserAutomation().getCode() + "\""
+                + "\"status\": \"" + patient.getStatus().toString() + "\","
+                + "\"userAutomation\": \"" + patient.getUserAutomation().toString() + "\""
                 + "}";
         ConnectionDao.makePutRequest(ENDPOINT + "/" + patient.getCpf(), jsonData);
     }
     
     public static void deletePatient(String cpf) throws IOException {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + cpf);
+    }
+
+    public static String listPatients() throws IOException {
+        return ConnectionDao.makeGetRequest(ENDPOINT);
     }
 }

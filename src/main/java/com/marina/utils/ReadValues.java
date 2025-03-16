@@ -1,5 +1,6 @@
 package com.marina.utils;
 
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -9,29 +10,35 @@ import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
 
 public class ReadValues {
-    private static Scanner getScanner() {
-        return new Scanner(System.in);
-    }
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static String readString(String message) {
-        try (Scanner scanner = getScanner()) {
-            System.out.print(message);
-            return scanner.nextLine().trim();
-        }
+        System.out.print(message);
+        return scanner.nextLine().trim();
     }
 
     public static int readInt(String message) {
-        try (Scanner scanner = getScanner()) {
-            System.out.print(message);
-            return scanner.nextInt();
+        while (true) {
+            try {
+                System.out.print(message);
+                String input = scanner.nextLine().trim();
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, digite um número válido.");
+            }
         }
     }
 
     public static Date readDate(String message) {
-        try (Scanner scanner = getScanner()) {
-            System.out.print(message);
-            String dateString = scanner.nextLine().trim();
-            return Formatter.parseDate(dateString);
+        // formato: dd/MM/yyyy HH:mm
+        while (true) {
+            try {
+                System.out.print(message);
+                String dateString = scanner.nextLine().trim();
+                return Formatter.parseDate(dateString);
+            } catch (DateTimeParseException e) {
+                System.out.println("Data inválida. Tente novamente. Formato: dd/MM/yyyy HH:mm");
+            }
         }
     }
 
@@ -93,17 +100,14 @@ public class ReadValues {
 
     public static Profile readProfile(String message) {
         while (true) {
-            try (Scanner scanner = getScanner()) {
-                System.out.print(message);
-                String profile = scanner.nextLine().trim();
-                if (profile.equals("P") || profile.equals("p")) {
-                    return Profile.PACIENTE;
-                }
-                if (profile.equals("M") || profile.equals("m")) {
-                    return Profile.MEDICO;
-                }
-                System.out.println("Perfil inválido. Tente novamente. Formato: P para paciente ou M para médico");
+            String profile = readString(message);
+            if (profile.equals("P") || profile.equals("p")) {
+                return Profile.PACIENTE;
             }
+            if (profile.equals("M") || profile.equals("m")) {
+                return Profile.MEDICO;
+            }
+            System.out.println("Perfil inválido. Tente novamente. Formato: P para paciente ou M para médico");
         }
     }  
 
@@ -139,7 +143,7 @@ public class ReadValues {
             if (option >= min && option <= max) {
                 return option;
             }
-            System.out.println("Opção inválida. Tente novamente. Formato: Número da opção entre " + min + " e " + max);
+            System.out.println("Opção inválida. Digite um número entre " + min + " e " + max + ".");
         }
     }   
 }

@@ -17,4 +17,11 @@ public class JsonParser {
             throw new RuntimeException("Error parsing JSON: " + e.getMessage());
         }
     }
+
+    public static String extractMessage(String json) {
+        if (json == null || !json.contains("message")) {
+            return null;
+        }
+        return json.replaceAll("^\\{\"message\":\"", "").replaceAll("\"}$", "");
+    }
 }

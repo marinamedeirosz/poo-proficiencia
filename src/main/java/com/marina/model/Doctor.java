@@ -13,6 +13,10 @@ public class Doctor extends Person {
         this.crm = crm;
     }
 
+    public Doctor() {
+        super();
+    }
+
     public String getCrm() {
         return crm;
     }
@@ -24,5 +28,10 @@ public class Doctor extends Person {
     @Override
     public String getDetails() {
         return "Médico: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone()) + ", CRM: " + Formatter.formatCrm(crm);
+    }
+
+    @Override
+    public String toString() {
+        return getDetails();
     }
 }

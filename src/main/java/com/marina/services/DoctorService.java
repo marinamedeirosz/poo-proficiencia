@@ -1,6 +1,7 @@
 package com.marina.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.marina.dao.DoctorDao;
 import com.marina.enums.Profile;
@@ -8,6 +9,7 @@ import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
 import com.marina.factory.PersonFactory;
 import com.marina.model.Doctor;
+import com.marina.utils.JsonParser;
 import com.marina.utils.ReadValues;
 
 public class DoctorService {
@@ -57,9 +59,14 @@ public class DoctorService {
         }
     }
 
-    public static String listDoctors() throws IOException {
+    public static void listDoctors() throws IOException {
         try {
-            return DoctorDao.listDoctors();
+            String json = DoctorDao.listDoctors();
+            List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);
+
+            for (Doctor d : doctors) {
+                System.out.println(d.toString());
+            }
         } catch (IOException e) {
             throw new IOException("Erro ao listar médicos: " + e.getMessage());
         }

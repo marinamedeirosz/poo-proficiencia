@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.marina.model.Doctor;
 
 public class DoctorDao {
-    private static final String ENDPOINT = "pessoa";
+    private static final String ENDPOINT = "medico";
 
     public static String createDoctor(Doctor doc) throws IOException {
         String jsonData = "{"
@@ -14,6 +14,7 @@ public class DoctorDao {
                 + "\"phone\": \"" + doc.getPhone() + "\","
                 + "\"profile\": \"" + doc.getProfile().getValue() + "\","
                 + "\"status\": \"" + doc.getStatus().toString() + "\","
+                + "\"crm\": \"" + doc.getCrm() + "\","
                 + "\"userAutomation\": \"" + doc.getUserAutomation().toString() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);

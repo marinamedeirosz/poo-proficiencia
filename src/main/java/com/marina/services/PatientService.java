@@ -20,7 +20,8 @@ public class PatientService {
     
         Patient patient = (Patient) PersonFactory.createPerson(name, cpf, phone, Profile.PACIENTE, Status.ATIVO, YesOrNo.SIM, null);
         try {
-                PatientDao.createPatient(patient);
+            String response = PatientDao.createPatient(patient);
+            System.out.println(response);
         } catch (IOException e) {
             throw new IOException("Erro ao criar paciente: " + e.getMessage());
         }

@@ -21,7 +21,8 @@ public class DoctorService {
     
         Doctor doctor = (Doctor) PersonFactory.createPerson(name, cpf, phone, Profile.MEDICO, Status.ATIVO, YesOrNo.SIM, crm);
         try {
-            DoctorDao.createDoctor(doctor);
+            String response = DoctorDao.createDoctor(doctor);
+            System.out.println(response);
         } catch (IOException e) {
             throw new IOException("Erro ao criar médico: " + e.getMessage());
         }

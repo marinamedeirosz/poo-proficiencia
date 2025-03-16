@@ -46,14 +46,16 @@ public class Menu {
     };
 
     public static void showMenu() throws IOException {
-        Style.printLine(50);
-        System.out.println("Selecione uma opção:");
-        for (String OPTIONS1 : OPTIONS) {
-            System.out.println(OPTIONS1);
+        while (true) {
+            Style.printLine(50);
+            System.out.println("Selecione uma opção:");
+            for (String option : OPTIONS) {
+                System.out.println(option);
+            }
+            Style.printLine(50);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 4);    
+            handleMenu(option);
         }
-        Style.printLine(50);
-        int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 4);    
-        handleMenu(option);
     }
 
     public static void showLoginMenu() {
@@ -68,35 +70,57 @@ public class Menu {
     }
 
     public static void showPatientMenu() throws IOException {
-        Style.printLine(50);
-        System.out.println("Selecione uma opção:");
-        for (String OPTIONS1 : PATIENT_OPTIONS) {
-            System.out.println(OPTIONS1);
+        while (true) {
+            Style.printLine(50);
+            System.out.println("Selecione uma opção:");
+            for (String option : PATIENT_OPTIONS) {
+                System.out.println(option);
+            }
+            Style.printLine(50);    
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 5);
+            if (option == 5) {
+                return;
+            }
+            handlePatientMenu(option);
+            System.out.println("\nPressione ENTER para continuar...");
+            ReadValues.readString("");
         }
-        Style.printLine(50);    
-        int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 5);
-        handlePatientMenu(option);
     }
 
     public static void showDoctorMenu() throws IOException {
-        Style.printLine(50);
-        System.out.println("Selecione uma opção:");
-        for (String OPTIONS1 : DOCTOR_OPTIONS) {
-            System.out.println(OPTIONS1);
+        while (true) {
+            Style.printLine(50);
+            System.out.println("Selecione uma opção:");
+            for (String option : DOCTOR_OPTIONS) {
+                System.out.println(option);
+            }
+            Style.printLine(50);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 5);
+            if (option == 5) {
+                return;
+            }
+            handleDoctorMenu(option);
+            System.out.println("\nPressione ENTER para continuar...");
+            ReadValues.readString("");
         }
-        Style.printLine(50);
-        int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 5);
-        handleDoctorMenu(option);
     }
 
-    public static void showConsultMenu() {
-        Style.printLine(50);
-        System.out.println("Selecione uma opção:");
-        for (String OPTIONS1 : CONSULT_OPTIONS) {
-            System.out.println(OPTIONS1);
+    public static void showConsultMenu() throws IOException {
+        while (true) {
+            Style.printLine(50);
+            System.out.println("Selecione uma opção:");
+            for (String option : CONSULT_OPTIONS) {
+                System.out.println(option);
+            }
+            Style.printLine(50);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 5);
+            if (option == 5) {
+                return;
+            }
+            //handleConsultMenu(option);
+            System.out.println("\nPressione ENTER para continuar...");
+            ReadValues.readString("");
         }
-        Style.printLine(50);
-        int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 5);
     }
 
     public static void handleMenu(int option) throws IOException {
@@ -111,6 +135,7 @@ public class Menu {
                 showConsultMenu();
                 break;
             case 4:
+                System.out.println("Saindo do sistema...");
                 System.exit(0);
                 break;
         }

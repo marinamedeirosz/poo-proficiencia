@@ -11,13 +11,15 @@ public class Appointment {
     private final Date date;
     private final String observation;
     private final AppointmentStatus status;
+    private final String id;
 
-    public Appointment(Doctor doctor, Patient patient, Date date, String observation, AppointmentStatus status) {
+    public Appointment(Doctor doctor, Patient patient, Date date, String observation, AppointmentStatus status, String id) {
         this.doctor = doctor;
         this.patient = patient;
         this.date = date;
         this.observation = observation;
         this.status = status;
+        this.id = id;
     }
 
     public Doctor getDoctor() {
@@ -44,8 +46,12 @@ public class Appointment {
         return AppointmentStatus.AGENDADA.equals(this.status);
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
-        return "Consulta com " + doctor.getName() + " do paciente " + patient.getName() + " no dia " + Formatter.formatDate(date) + " - Situação: " + status.toString();
+        return "Consulta " + id + " - Médico " + doctor.getName() + " do paciente " + patient.getName() + " no dia " + Formatter.formatDate(date) + " - Situação: " + status.toString();
     }
 }

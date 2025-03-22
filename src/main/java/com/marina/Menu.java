@@ -2,6 +2,8 @@ package com.marina;
 
 import java.io.IOException;
 
+import com.marina.services.AppointmentService;
+import com.marina.services.AuthService;
 import com.marina.services.DoctorService;
 import com.marina.services.PatientService;
 import com.marina.utils.ReadValues;
@@ -18,24 +20,42 @@ public class Menu {
         "[1] - Cadastrar Paciente",
         "[2] - Listar Pacientes",
         "[3] - Atualizar Paciente",
-        "[4] - Deletar Paciente",
-        "[5] - Voltar"
+        "[4] - Voltar"
+    };
+
+    private static final IMenuOption[] PATIENT_MENU_OPTIONS = {
+        () -> PatientService.createPatient(),
+        () -> PatientService.listPatients(),
+        () -> PatientService.updatePatient(),
+        () -> showMenu()
     };
 
     private static final String[] DOCTOR_OPTIONS = {
         "[1] - Cadastrar Médico",
         "[2] - Listar Médicos",
         "[3] - Atualizar Médico",
-        "[4] - Deletar Médico",
-        "[5] - Voltar"
+        "[4] - Voltar"
     };
 
-    private static final String[] CONSULT_OPTIONS = {
+    private static final IMenuOption[] DOCTOR_MENU_OPTIONS = {
+        () -> DoctorService.createDoctor(),
+        () -> DoctorService.listDoctors(),
+        () -> DoctorService.updateDoctor(),
+        () -> showMenu()
+    };
+
+    private static final String[] APPOINTMENT_OPTIONS = {
         "[1] - Cadastrar Consulta",
         "[2] - Listar Consultas",
         "[3] - Atualizar Consulta",
-        "[4] - Deletar Consulta",
-        "[5] - Voltar"
+        "[4] - Voltar"
+    };
+
+    private static final IMenuOption[] APPOINTMENT_MENU_OPTIONS = {
+        () -> AppointmentService.createAppointment(),
+        () -> AppointmentService.listAppointments(),
+        () -> AppointmentService.updateAppointment(),
+        () -> showMenu()
     };
 
     private static final String[] OPTIONS = {
@@ -58,15 +78,20 @@ public class Menu {
         }
     }
 
-    public static void showLoginMenu() {
-        Style.printHeart();
-        Style.printLine(50);
-        System.out.println("Selecione uma opção:");
-        for (String OPTIONS1 : LOGIN_OPTIONS) {
-            System.out.println(OPTIONS1);
+    public static void showLoginMenu() throws IOException {
+        while (true) {
+            Style.printHeart();
+            Style.printLine(50);
+            System.out.println("Selecione uma opção:");
+            for (String option : LOGIN_OPTIONS) {
+                System.out.println(option);
+            }
+            Style.printLine(50);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 3);
+            handleLoginMenu(option);
+            System.out.println("\nPressione ENTER para continuar...");
+            ReadValues.readString("");
         }
-        Style.printLine(50);
-        int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 3);
     }
 
     public static void showPatientMenu() throws IOException {
@@ -109,7 +134,7 @@ public class Menu {
         while (true) {
             Style.printLine(50);
             System.out.println("Selecione uma opção:");
-            for (String option : CONSULT_OPTIONS) {
+            for (String option : APPOINTMENT_OPTIONS) {
                 System.out.println(option);
             }
             Style.printLine(50);
@@ -180,4 +205,35 @@ public class Menu {
                 break;
         }
     }     
+
+    public static void handleLoginMenu(int option) throws IOException {
+        switch (option) {
+            case 1:
+                String response = AuthService.login();
+                if (response.equals("Autenticado com sucesso.")) {
+                    showMenu();
+                } else {
+                    System.out.println(response);
+                }
+                break;
+            case 2:
+                String response2 = AuthService.register();
+                if (response2.equals("Usuário criado com sucesso!")) {
+                    Style.printLine(50);
+                    System.out.println(response2);
+                    Style.printLine(50);
+                    showLoginMenu();
+                } else {
+                    System.out.println(response2);
+                }
+                break;
+            case 3:
+                System.out.println("Saindo do sistema...");
+                System.exit(0);
+        }
+    }
+
+    public interface IMenuOption {
+        void run() throws IOException;
+    }
 }

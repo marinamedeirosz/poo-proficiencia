@@ -2,12 +2,16 @@ package com.marina.services;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import com.marina.dao.ConnectionDao;
+import com.marina.enums.AppointmentStatus;
 import com.marina.enums.Status;
 import com.marina.model.Appointment;
 import com.marina.utils.Formatter;
+import com.marina.utils.JsonParser;
 import com.marina.utils.ReadValues;
+import com.marina.utils.Style;
 
 public class AppointmentService {
     private static final String ENDPOINT = "consulta";
@@ -43,13 +47,30 @@ public class AppointmentService {
         }
     }
 
-    public static void updateAppointment(Appointment appointment, String id) throws IOException {
+    public static void updateAppointment() throws IOException {
+        String appointmentsJson = listAppointments();
+        List<Appointment> appointments = JsonParser.parseJson(appointmentsJson, Appointment.class);
+        int number = 1;
+
+        for (Appointment appointment : appointments) {
+            Style.printLine(50);
+            System.out.println(number + " - " + appointment.toString());
+            Style.printLine(50);
+            number++;
+        }
+
+        int option = ReadValues.readInt("Digite o número da consulta que deseja atualizar: ");
+        Appointment appointment = appointments.get(option - 1);
+        
+        String observation = ReadValues.readString("Digite a observação da consulta: ");
+        AppointmentStatus status = ReadValues.readAppointmentStatus("Digite o status da consulta (A - agendada, C - cancelada, R - realizada): ");
+
         String jsonData = "{"
-                + "\"observation\": \"" + appointment.getObservation() + "\","
-                + "\"status\": \"" + appointment.getStatus() + "\""
+                + "\"observation\": \"" + observation + "\","
+                + "\"status\": \"" + status.toString() + "\""
                 + "}";  
         try {
-            ConnectionDao.makePutRequest(ENDPOINT + "/" + id, jsonData);
+            ConnectionDao.makePutRequest(ENDPOINT + "/" + appointment.getId(), jsonData);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar consulta: " + e.getMessage());
         }

@@ -24,7 +24,9 @@ public class ReadValues {
                 String input = scanner.nextLine().trim();
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
+                Style.printLine(50);
                 System.out.println("Por favor, digite um número válido.");
+                Style.printLine(50);
             }
         }
     }
@@ -37,7 +39,9 @@ public class ReadValues {
                 String dateString = scanner.nextLine().trim();
                 return Formatter.parseDate(dateString);
             } catch (DateTimeParseException e) {
+                Style.printLine(50);
                 System.out.println("Data inválida. Tente novamente. Formato: dd/MM/yyyy HH:mm");
+                Style.printLine(50);
             }
         }
     }
@@ -46,9 +50,11 @@ public class ReadValues {
         while (true) {
             String cpf = readString(message);
             if (cpf.matches("\\d{11}")) {
-                    return cpf;
-                }
+                return cpf;
+            }
+            Style.printLine(50);
             System.out.println("CPF inválido. Tente novamente. Formato: 000.000.000-00");
+            Style.printLine(50);
         }
     }
     
@@ -56,9 +62,11 @@ public class ReadValues {
         while (true) {
             String crm = readString(message);
             if (crm.matches("\\d{6}")) {
-                    return crm;
-                }
+                return crm;
+            }
+            Style.printLine(50);
             System.out.println("CRM inválido. Tente novamente. Formato: 000000");
+            Style.printLine(50);
         }
     }   
 
@@ -66,9 +74,11 @@ public class ReadValues {
         while (true) {
             String phone = readString(message);
             if (phone.matches("\\d{11}")) {
-                    return phone;
-                }
+                return phone;
+            }
+            Style.printLine(50);
             System.out.println("Telefone inválido. Tente novamente. Formato: 00000000000");
+            Style.printLine(50);
         }
     }
 
@@ -77,11 +87,13 @@ public class ReadValues {
             String status = readString(message);
             if (status.equals("A") || status.equals("a")) {
                 return Status.ATIVO;
-                }
-                if (status.equals("I") || status.equals("i")) {
-                    return Status.INATIVO;
-                }
+            }
+            if (status.equals("I") || status.equals("i")) {
+                return Status.INATIVO;
+            }
+            Style.printLine(50);
             System.out.println("Status inválido. Tente novamente. Formato: A para ativo ou I para inativo");
+            Style.printLine(50);
         }   
     }
 
@@ -94,7 +106,9 @@ public class ReadValues {
             if (yesNo.equals("N") || yesNo.equals("n")) {
                 return YesOrNo.NAO;
             }
+            Style.printLine(50);
             System.out.println("Opção inválida. Tente novamente. Formato: S para sim ou N para não");
+            Style.printLine(50);
         }
     }
 
@@ -107,7 +121,9 @@ public class ReadValues {
             if (profile.equals("M") || profile.equals("m")) {
                 return Profile.MEDICO;
             }
+            Style.printLine(50);
             System.out.println("Perfil inválido. Tente novamente. Formato: P para paciente ou M para médico");
+            Style.printLine(50);
         }
     }  
 
@@ -123,7 +139,9 @@ public class ReadValues {
             if (appointmentStatus.equals("R") || appointmentStatus.equals("r")) {
                 return AppointmentStatus.REALIZADA;
             }
+            Style.printLine(50);
             System.out.println("Status da consulta inválido. Tente novamente. Formato: A para agendada ou C para cancelada ou R para realizada");
+            Style.printLine(50);
         }
     }
 
@@ -133,7 +151,9 @@ public class ReadValues {
             if (name.matches("[\\p{L}\\s]+") && name.split("\\s+").length >= 2) {
                 return name;
             }
+            Style.printLine(50);
             System.out.println("Nome inválido. Tente novamente. Formato: Nome completo (mínimo dois nomes).");
+            Style.printLine(50);
         }
     }
 
@@ -141,9 +161,12 @@ public class ReadValues {
         while (true) {
             int option = readInt(message);
             if (option >= min && option <= max) {
+                Style.printLine(50);
                 return option;
             }
+            Style.printLine(50);
             System.out.println("Opção inválida. Digite um número entre " + min + " e " + max + ".");
+            Style.printLine(50);
         }
     }   
 }

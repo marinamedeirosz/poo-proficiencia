@@ -6,14 +6,14 @@ import com.marina.enums.AppointmentStatus;
 import com.marina.utils.Formatter;
 
 public class Appointment {
-    private final Doctor doctor;
-    private final Patient patient;
+    private final String doctor;
+    private final String patient;
     private final Date date;
-    private final String observation;
-    private final AppointmentStatus status;
+    private String observation;
+    private AppointmentStatus status;
     private final String id;
 
-    public Appointment(Doctor doctor, Patient patient, Date date, String observation, AppointmentStatus status, String id) {
+    public Appointment(String doctor, String patient, Date date, String observation, AppointmentStatus status, String id) {
         this.doctor = doctor;
         this.patient = patient;
         this.date = date;
@@ -22,11 +22,11 @@ public class Appointment {
         this.id = id;
     }
 
-    public Doctor getDoctor() {
+    public String getDoctor() {
         return doctor;
     }
 
-    public Patient getPatient() {
+    public String getPatient() {
         return patient;
     }
 
@@ -38,8 +38,16 @@ public class Appointment {
         return observation;
     }
 
+    public void setObservation(String observation) {
+        this.observation = observation;
+    }
+
     public AppointmentStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
     }
 
     public boolean isActive() {
@@ -52,6 +60,6 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "Consulta " + id + " - Médico " + doctor.getName() + " do paciente " + patient.getName() + " no dia " + Formatter.formatDate(date) + " - Situação: " + status.toString();
+        return "Consulta " + id + " - Médico " + doctor + " do paciente " + patient + " no dia " + Formatter.formatDate(date) + " - Situação: " + status.toString();
     }
 }

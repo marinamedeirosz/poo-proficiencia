@@ -1,7 +1,7 @@
 package com.marina.utils;
 
 public class Validator {
-    public static boolean isValid(String cpf) {
+    public static boolean isValidCpf(String cpf) {
         try {
             cpf = cpf.replaceAll("[^0-9]", "");
 

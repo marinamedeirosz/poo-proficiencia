@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import com.marina.dao.AppointmentDao;
 import com.marina.dao.ConnectionDao;
 import com.marina.enums.AppointmentStatus;
-import com.marina.enums.Status;
 import com.marina.model.Appointment;
 import com.marina.utils.Formatter;
 import com.marina.utils.JsonParser;
@@ -21,19 +21,18 @@ public class AppointmentService {
         String patientCpf = ReadValues.readCpf("Digite o CPF do paciente: ");
         Date appointmentDate = ReadValues.readDate("Digite a data da consulta: ");
         String observation = ReadValues.readString("Digite a observação da consulta: ");
-        Status status = ReadValues.readStatus("Digite o status da consulta: ");
-
-        // Appointment appointment = new Appointment(doctorCrm, patientCpf, appointmentDate, observation, status);
+        AppointmentStatus status = ReadValues.readAppointmentStatus("Digite o status da consulta (A - agendada, C - cancelada, R - realizada): ");
 
         String jsonData = "{"
-                + "\"doctorCrm\": \"" + doctorCrm + "\","
+                + "\"doctorCrm\": \"" + doctorCrm + "\","   
                 + "\"patientCpf\": \"" + patientCpf + "\","
                 + "\"appointmentDate\": \"" + Formatter.formatDate(appointmentDate) + "\","
                 + "\"observation\": \"" + observation + "\","
-                + "\"status\": \"" + status + "\""
+                + "\"status\": \"" + status.toString() + "\""
                 + "}";
         try {
-            ConnectionDao.makePostRequest(ENDPOINT, jsonData);
+            String response = ConnectionDao.makePostRequest(ENDPOINT, jsonData);
+            System.out.println(response);
         } catch (IOException e) {
             throw new IOException("Erro ao criar consulta: " + e.getMessage());
         }
@@ -65,22 +64,12 @@ public class AppointmentService {
         String observation = ReadValues.readString("Digite a observação da consulta: ");
         AppointmentStatus status = ReadValues.readAppointmentStatus("Digite o status da consulta (A - agendada, C - cancelada, R - realizada): ");
 
-        String jsonData = "{"
-                + "\"observation\": \"" + observation + "\","
-                + "\"status\": \"" + status.toString() + "\""
-                + "}";  
+        appointment.setObservation(observation);
+        appointment.setStatus(status);
         try {
-            ConnectionDao.makePutRequest(ENDPOINT + "/" + appointment.getId(), jsonData);
+            AppointmentDao.updateAppointment(appointment);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar consulta: " + e.getMessage());
-        }
-    }
-
-    public static void deleteAppointment(String id) throws IOException {
-        try {
-            ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + id);
-        } catch (IOException e) {
-            throw new IOException("Erro ao deletar consulta: " + e.getMessage());
         }
     }
 
@@ -91,5 +80,4 @@ public class AppointmentService {
             throw new IOException("Erro ao listar consultas: " + e.getMessage());
         }
     }
-    
 }

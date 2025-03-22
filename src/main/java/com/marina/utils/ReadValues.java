@@ -50,10 +50,12 @@ public class ReadValues {
         while (true) {
             String cpf = readString(message);
             if (cpf.matches("\\d{11}")) {
-                return cpf;
+                if (Validator.isValidCpf(cpf)) {
+                    return cpf;
+                }
             }
             Style.printLine(50);
-            System.out.println("CPF inválido. Tente novamente. Formato: 000.000.000-00");
+            System.out.println("CPF inválido. Tente novamente. Formato: 00000000000 e cálculo de dígitos verificadores correto");
             Style.printLine(50);
         }
     }

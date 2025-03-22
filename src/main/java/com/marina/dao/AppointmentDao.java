@@ -9,8 +9,8 @@ public class AppointmentDao {
 
     public static String createAppointment(Appointment appointment) throws IOException {
         String jsonData = "{"
-                + "\"doctorCpf\": \"" + appointment.getDoctor().getCpf() + "\","
-                + "\"patientCpf\": \"" + appointment.getPatient().getCpf() + "\","
+                + "\"doctorCpf\": \"" + appointment.getDoctor() + "\","
+                + "\"patientCpf\": \"" + appointment.getPatient() + "\","
                 + "\"date\": \"" + appointment.getDate() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
@@ -20,13 +20,13 @@ public class AppointmentDao {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + id);
     }
     
-    public static void updateAppointment(String id, Appointment appointment) throws IOException {
+    public static void updateAppointment(Appointment appointment) throws IOException {
         String jsonData = "{"
-                + "\"doctorCpf\": \"" + appointment.getDoctor().getCpf() + "\","
-                + "\"patientCpf\": \"" + appointment.getPatient().getCpf() + "\","
+                + "\"doctorCpf\": \"" + appointment.getDoctor() + "\","
+                + "\"patientCpf\": \"" + appointment.getPatient() + "\","
                 + "\"date\": \"" + appointment.getDate() + "\""
                 + "}";
-        ConnectionDao.makePutRequest(ENDPOINT + "/" + id, jsonData);    
+        ConnectionDao.makePutRequest(ENDPOINT + "/" + appointment.getId(), jsonData);    
     }
     
     public static void deleteAppointment(String id) throws IOException {

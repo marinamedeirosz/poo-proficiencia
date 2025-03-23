@@ -7,6 +7,7 @@ import java.util.List;
 import com.marina.dao.AppointmentDao;
 import com.marina.dao.ConnectionDao;
 import com.marina.enums.AppointmentStatus;
+import com.marina.enums.Status;
 import com.marina.model.Appointment;
 import com.marina.model.Doctor;
 import com.marina.model.Patient;
@@ -27,22 +28,22 @@ public class AppointmentService {
         DoctorService.listDoctorsView();
         while (true) {
             String tempCrm = ReadValues.readCrm("Digite o CRM do médico: ");
-            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm))) {
+            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm)) && doctors.stream().anyMatch(d -> d.getStatus() == Status.ATIVO)) {
                 doctorCrm = tempCrm;
                 break;
             }
-            System.out.println("CRM inválido. Escolha um médico válido.");
+            System.out.println("CRM inválido. Escolha um médico válido e ativo.");
         }
 
         List<Patient> patients = PatientService.listPatients();
         PatientService.listPatientsView();
         while (true) {
             String tempCpf = ReadValues.readCpf("Digite o CPF do paciente: ");
-            if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf))) {
+            if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf)) && patients.stream().anyMatch(p -> p.getStatus() == Status.ATIVO)) {
                 patientCpf = tempCpf;
                 break;
             }
-            System.out.println("CPF inválido. Escolha um paciente válido.");
+            System.out.println("CPF inválido. Escolha um paciente válido e ativo.");
         }
 
         AppointmentStatus status = ReadValues.readAppointmentStatus("Digite o status da consulta (A - agendada, C - cancelada, R - realizada): ");

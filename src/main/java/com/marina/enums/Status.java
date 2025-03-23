@@ -18,6 +18,17 @@ public enum Status {
         return code;
     }
 
+    public String getText() {
+        switch (this) {
+            case ATIVO:
+                return "Ativo";
+            case INATIVO:
+                return "Inativo";
+            default:
+                return "";
+        }
+    }
+
     @JsonValue
     @Override
     public String toString() {

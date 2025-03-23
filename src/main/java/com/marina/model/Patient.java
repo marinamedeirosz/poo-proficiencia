@@ -17,7 +17,7 @@ public class Patient extends Person {
 
     @Override
     public String getDetails() {
-        return "Paciente: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone());
+        return "Paciente: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone()) + ", Situação: " + getStatus().getText();
     }
 
     @Override

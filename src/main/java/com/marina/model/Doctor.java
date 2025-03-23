@@ -27,7 +27,7 @@ public class Doctor extends Person {
 
     @Override
     public String getDetails() {
-        return "Médico: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone()) + ", CRM: " + Formatter.formatCrm(crm);
+        return "Médico: " + getName() + ", CPF: " + Formatter.formatCpf(getCpf()) + ", Telefone: " + Formatter.formatPhone(getPhone()) + ", CRM: " + Formatter.formatCrm(crm) + ", Situação: " + getStatus().getText();
     }
 
     @Override

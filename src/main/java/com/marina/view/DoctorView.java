@@ -13,14 +13,12 @@ public class DoctorView {
     private static final String[] OPTIONS = {
         "[1] - Cadastrar Médico",
         "[2] - Listar Médicos",
-        "[3] - Atualizar Médico",
-        "[4] - Voltar"
+        "[3] - Voltar"
     };
 
     private static final IMenuOption[] METHODS = {
         () -> DoctorService.createDoctor(),
         () -> DoctorService.listDoctorsView(),
-        () -> DoctorService.updateDoctor(),
         () -> showMenu()
     };
     

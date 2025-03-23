@@ -84,7 +84,7 @@ public class ConnectionDao {
         }
     }
 
-    public static void makePutRequest(String endpoint, String jsonData) throws IOException {
+    public static String makePutRequest(String endpoint, String jsonData) throws IOException {
         HttpURLConnection connection = setupConnection(endpoint, "PUT");
         connection.setDoOutput(true);
 
@@ -94,8 +94,17 @@ public class ConnectionDao {
         }
 
         int responseCode = connection.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new IOException("Failed to update resource: " + responseCode);
+        InputStream stream = responseCode >= 400 ? connection.getErrorStream() : connection.getInputStream();
+
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+
+            return JsonParser.extractMessage(response.toString());
         }
     }
 

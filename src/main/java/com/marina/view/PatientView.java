@@ -12,14 +12,12 @@ public class PatientView {
     private static final String[] OPTIONS = {
         "[1] - Cadastrar Paciente",
         "[2] - Listar Pacientes",
-        "[3] - Atualizar Paciente",
-        "[4] - Voltar"
+        "[3] - Voltar"
     };
 
     private static final IMenuOption[] METHODS = {
         () -> PatientService.createPatient(),
         () -> PatientService.listPatientsView(),
-        () -> PatientService.updatePatient(),
         () -> showMenu()
     };
 

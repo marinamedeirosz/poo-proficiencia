@@ -22,6 +22,15 @@ public class Appointment {
         this.id = id;
     }
 
+    public Appointment() {
+        this.doctor = "";
+        this.patient = "";
+        this.date = new Date();
+        this.observation = "";
+        this.status = AppointmentStatus.AGENDADA;
+        this.id = "";
+    }
+
     public String getDoctor() {
         return doctor;
     }
@@ -60,6 +69,10 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "Consulta " + id + " - Médico " + doctor + " do paciente " + patient + " no dia " + Formatter.formatDate(date) + " - Situação: " + status.toString();
+        return "| Médico: " + doctor + 
+             "\n| Paciente: " + patient +
+             "\n| Data: " + Formatter.formatDate(date) +
+             "\n| Situação: " + status.getText() +
+             "\n| Observação: " + (observation == null || observation.isEmpty() ? "Não há observação" : observation);
     }
 }

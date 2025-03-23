@@ -5,20 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 import com.marina.dao.AppointmentDao;
-import com.marina.dao.ConnectionDao;
 import com.marina.enums.AppointmentStatus;
 import com.marina.enums.Status;
 import com.marina.model.Appointment;
 import com.marina.model.Doctor;
 import com.marina.model.Patient;
-import com.marina.utils.Formatter;
 import com.marina.utils.JsonParser;
 import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class AppointmentService {
-    private static final String ENDPOINT = "consulta";
-
     public static void createAppointment() throws IOException { 
         final String patientCpf;
         final String doctorCrm;
@@ -61,15 +57,10 @@ public class AppointmentService {
 
         String observation = ReadValues.readString("Digite a observação da consulta: ");
 
-        String jsonData = "{"
-                + "\"doctorCrm\": \"" + doctorCrm + "\","   
-                + "\"patientCpf\": \"" + patientCpf + "\","
-                + "\"appointmentDate\": \"" + Formatter.formatDate(appointmentDate) + "\","
-                + "\"observation\": \"" + observation + "\","
-                + "\"status\": \"" + status.toString() + "\""
-                + "}";
+        Appointment appointment = new Appointment(doctorCrm, patientCpf, appointmentDate, observation, status, "");
+
         try {
-            String response = ConnectionDao.makePostRequest(ENDPOINT, jsonData);
+            String response = AppointmentDao.createAppointment(appointment);
             Style.printLine(50);
             System.out.println(response);
             Style.printLine(50);
@@ -80,7 +71,7 @@ public class AppointmentService {
 
     public static String getAppointment(String id) throws IOException {
         try {   
-            return ConnectionDao.makeGetRequest(ENDPOINT + "/" + id);
+            return AppointmentDao.getAppointment(id);
         } catch (IOException e) {
             throw new IOException("Erro ao buscar consulta: " + e.getMessage());
         }
@@ -90,14 +81,21 @@ public class AppointmentService {
         List<Appointment> appointments = listAppointments();
         int number = 1;
 
-        for (Appointment appointment : appointments) {
+        if (appointments.isEmpty()) {
             Style.printLine(50);
-            System.out.println(number + " - " + appointment.toString());
+            System.out.println("Não existem consultas cadastradas.");
+            Style.printLine(50);
+            return;
+        }
+
+        for (Appointment appointment : appointments) {
+            System.out.println("*********** Consulta " + number + " ***********");
+            System.out.println(appointment.toString());
             Style.printLine(50);
             number++;
         }
 
-        int option = ReadValues.readInt("Digite o número da consulta que deseja atualizar: ");
+        int option = ReadValues.readMenuOption("Digite o número da consulta que deseja atualizar: ", 1, appointments.size());
         Appointment appointment = appointments.get(option - 1);
         
         String observation = ReadValues.readString("Digite a observação da consulta: ");
@@ -106,7 +104,9 @@ public class AppointmentService {
         appointment.setObservation(observation);
         appointment.setStatus(status);
         try {
-            AppointmentDao.updateAppointment(appointment);
+            Style.printLine(50);
+            System.out.println(AppointmentDao.updateAppointment(appointment));
+            Style.printLine(50);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar consulta: " + e.getMessage());
         }
@@ -114,7 +114,7 @@ public class AppointmentService {
 
     public static List<Appointment> listAppointments() throws IOException {
         try {
-            String json = ConnectionDao.makeGetRequest(ENDPOINT);
+            String json = AppointmentDao.listAppointments();
             List<Appointment> appointments = JsonParser.parseJson(json, Appointment.class);
 
             return appointments;

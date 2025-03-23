@@ -8,6 +8,8 @@ import com.marina.dao.AppointmentDao;
 import com.marina.dao.ConnectionDao;
 import com.marina.enums.AppointmentStatus;
 import com.marina.model.Appointment;
+import com.marina.model.Doctor;
+import com.marina.model.Patient;
 import com.marina.utils.Formatter;
 import com.marina.utils.JsonParser;
 import com.marina.utils.ReadValues;
@@ -17,11 +19,46 @@ public class AppointmentService {
     private static final String ENDPOINT = "consulta";
 
     public static void createAppointment() throws IOException { 
-        String doctorCrm = ReadValues.readCrm("Digite o CRM do médico: ");
-        String patientCpf = ReadValues.readCpf("Digite o CPF do paciente: ");
-        Date appointmentDate = ReadValues.readDate("Digite a data da consulta: ");
-        String observation = ReadValues.readString("Digite a observação da consulta: ");
+        final String patientCpf;
+        final String doctorCrm;
+        Date appointmentDate;
+
+        List<Doctor> doctors = DoctorService.listDoctors();
+        DoctorService.listDoctorsView();
+        while (true) {
+            String tempCrm = ReadValues.readCrm("Digite o CRM do médico: ");
+            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm))) {
+                doctorCrm = tempCrm;
+                break;
+            }
+            System.out.println("CRM inválido. Escolha um médico válido.");
+        }
+
+        List<Patient> patients = PatientService.listPatients();
+        PatientService.listPatientsView();
+        while (true) {
+            String tempCpf = ReadValues.readCpf("Digite o CPF do paciente: ");
+            if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf))) {
+                patientCpf = tempCpf;
+                break;
+            }
+            System.out.println("CPF inválido. Escolha um paciente válido.");
+        }
+
         AppointmentStatus status = ReadValues.readAppointmentStatus("Digite o status da consulta (A - agendada, C - cancelada, R - realizada): ");
+
+        while (true) {
+            appointmentDate = ReadValues.readDate("Digite a data da consulta: ");
+            if (status == AppointmentStatus.CANCELADA || status == AppointmentStatus.REALIZADA) {
+                break;
+            }
+            if (appointmentDate.after(new Date())) {
+                break;
+            }
+            System.out.println("Data inválida. Para consultas agendadas, escolha uma data futura.");
+        }
+
+        String observation = ReadValues.readString("Digite a observação da consulta: ");
 
         String jsonData = "{"
                 + "\"doctorCrm\": \"" + doctorCrm + "\","   

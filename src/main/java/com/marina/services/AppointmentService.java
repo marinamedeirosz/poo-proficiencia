@@ -32,7 +32,9 @@ public class AppointmentService {
                 + "}";
         try {
             String response = ConnectionDao.makePostRequest(ENDPOINT, jsonData);
+            Style.printLine(50);
             System.out.println(response);
+            Style.printLine(50);
         } catch (IOException e) {
             throw new IOException("Erro ao criar consulta: " + e.getMessage());
         }
@@ -47,8 +49,7 @@ public class AppointmentService {
     }
 
     public static void updateAppointment() throws IOException {
-        String appointmentsJson = listAppointments();
-        List<Appointment> appointments = JsonParser.parseJson(appointmentsJson, Appointment.class);
+        List<Appointment> appointments = listAppointments();
         int number = 1;
 
         for (Appointment appointment : appointments) {
@@ -73,9 +74,30 @@ public class AppointmentService {
         }
     }
 
-    public static String listAppointments() throws IOException {
+    public static List<Appointment> listAppointments() throws IOException {
         try {
-            return ConnectionDao.makeGetRequest(ENDPOINT);
+            String json = ConnectionDao.makeGetRequest(ENDPOINT);
+            List<Appointment> appointments = JsonParser.parseJson(json, Appointment.class);
+
+            return appointments;
+        } catch (IOException e) {
+            throw new IOException("Erro ao listar consultas: " + e.getMessage());
+        }
+    }
+
+    public static void listAppointmentsView() throws IOException {
+        try {
+            List<Appointment> appointments = listAppointments();
+
+            if (appointments.isEmpty()) {
+                System.out.println("Não existem consultas cadastradas.");
+                return;
+            }
+            
+            for (Appointment appointment : appointments) {
+                System.out.println(appointment.toString());
+                Style.printLine(50);
+            }
         } catch (IOException e) {
             throw new IOException("Erro ao listar consultas: " + e.getMessage());
         }

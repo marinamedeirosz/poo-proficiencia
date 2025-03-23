@@ -11,6 +11,7 @@ import com.marina.factory.PersonFactory;
 import com.marina.model.Doctor;
 import com.marina.utils.JsonParser;
 import com.marina.utils.ReadValues;
+import com.marina.utils.Style;
 
 public class DoctorService {
     public static void createDoctor() throws IOException {
@@ -22,7 +23,9 @@ public class DoctorService {
         Doctor doctor = (Doctor) PersonFactory.createPerson(name, cpf, phone, Profile.MEDICO, Status.ATIVO, YesOrNo.SIM, crm);
         try {
             String response = DoctorDao.createDoctor(doctor);
+            Style.printLine(50);
             System.out.println(response);
+            Style.printLine(50);
         } catch (IOException e) {
             throw new IOException("Erro ao criar médico: " + e.getMessage());
         }
@@ -37,15 +40,24 @@ public class DoctorService {
         }
     }
 
-    public static void updateDoctor() throws IOException {  
+    public static void updateDoctor() throws IOException { 
+        List<Doctor> doctors = listDoctors();
+        int number = 1;
+
+        for (Doctor doctor : doctors) {
+            System.out.println(number + " - " + doctor.toString());
+            number++;
+        }
+
+        int doctorNumber = ReadValues.readMenuOption("Digite o número do médico: ", 1, number);
+        Doctor doctor = doctors.get(doctorNumber - 1);
+
         String name = ReadValues.readName("Digite o nome do médico: ");
-        String cpf = ReadValues.readCpf("Digite o CPF do médico: ");
         String phone = ReadValues.readPhone("Digite o telefone do médico: ");
-        String crm = ReadValues.readCrm("Digite o CRM do médico: ");
-        
-        Doctor doctor = (Doctor) PersonFactory.createPerson(name, cpf, phone, Profile.MEDICO, Status.ATIVO, YesOrNo.SIM, crm);
+        Status status = ReadValues.readStatus("Digite a situação do médico: ");
+        Doctor doctorUpdated = (Doctor) PersonFactory.createPerson(name, doctor.getCpf(), phone, Profile.MEDICO, status, doctor.getUserAutomation(), doctor.getCrm());
         try {
-            DoctorDao.updateDoctor(doctor);
+            DoctorDao.updateDoctor(doctorUpdated);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar médico: " + e.getMessage());
         }
@@ -60,14 +72,31 @@ public class DoctorService {
         }
     }
 
-    public static void listDoctors() throws IOException {
+    public static void listDoctorsView() throws IOException {
         try {
             String json = DoctorDao.listDoctors();
             List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);
 
+            if (doctors.isEmpty()) {
+                System.out.println("Não existem médicos cadastrados.");
+                return;
+            }
+
             for (Doctor d : doctors) {
                 System.out.println(d.toString());
+                Style.printLine(50);
             }
+        } catch (IOException e) {
+            throw new IOException("Erro ao listar médicos: " + e.getMessage());
+        }
+    }
+
+    public static List<Doctor> listDoctors() throws IOException {
+        try {
+            String json = DoctorDao.listDoctors();
+            List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);
+
+            return doctors;
         } catch (IOException e) {
             throw new IOException("Erro ao listar médicos: " + e.getMessage());
         }

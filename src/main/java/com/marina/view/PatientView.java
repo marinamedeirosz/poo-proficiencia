@@ -18,7 +18,7 @@ public class PatientView {
 
     private static final IMenuOption[] METHODS = {
         () -> PatientService.createPatient(),
-        () -> PatientService.listPatients(),
+        () -> PatientService.listPatientsView(),
         () -> PatientService.updatePatient(),
         () -> showMenu()
     };

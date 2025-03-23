@@ -19,7 +19,7 @@ public class AppointmentView {
     
     private static final IMenuOption[] METHODS = {
         () -> AppointmentService.createAppointment(),
-        () -> AppointmentService.listAppointments(),
+        () -> AppointmentService.listAppointmentsView(),
         () -> AppointmentService.updateAppointment(),
         () -> showMenu()
     };

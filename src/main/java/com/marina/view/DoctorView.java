@@ -19,7 +19,7 @@ public class DoctorView {
 
     private static final IMenuOption[] METHODS = {
         () -> DoctorService.createDoctor(),
-        () -> DoctorService.listDoctors(),
+        () -> DoctorService.listDoctorsView(),
         () -> DoctorService.updateDoctor(),
         () -> showMenu()
     };

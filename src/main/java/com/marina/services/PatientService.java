@@ -14,7 +14,7 @@ import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class PatientService {
-    public static void createPatient() throws IOException {
+    public void createPatient() throws IOException {
         String name = ReadValues.readName("Digite o nome do paciente: ");
         String cpf = ReadValues.readCpf("Digite o CPF do paciente: ");
         String phone = ReadValues.readPhone("Digite o telefone do paciente: ");
@@ -30,7 +30,7 @@ public class PatientService {
         }
     }
 
-    public static void getPatient() throws IOException {
+    public void getPatient() throws IOException {
         String cpf = ReadValues.readCpf("Digite o CPF do paciente: ");
         try {
             PatientDao.getPatient(cpf);
@@ -39,7 +39,7 @@ public class PatientService {
         }
     }
 
-    public static void updatePatient() throws IOException {
+    public void updatePatient() throws IOException {
         List<Patient> patients = listPatients();
         int number = 1;
 
@@ -62,7 +62,7 @@ public class PatientService {
         }
     }
 
-    public static void deletePatient() throws IOException {
+    public void deletePatient() throws IOException {
         String cpf = ReadValues.readCpf("Digite o CPF do paciente: ");
         try {
             PatientDao.deletePatient(cpf);
@@ -71,7 +71,7 @@ public class PatientService {
         }   
     }
 
-    public static List<Patient> listPatients() throws IOException {
+    public List<Patient> listPatients() throws IOException {
         try {
             String json = PatientDao.listPatients();
             List<Patient> patients = JsonParser.parseJson(json, Patient.class);
@@ -82,7 +82,7 @@ public class PatientService {
         }
     }
 
-    public static void listPatientsView() throws IOException {
+    public void listPatientsView() throws IOException {
         try {
             List<Patient> patients = listPatients();
 

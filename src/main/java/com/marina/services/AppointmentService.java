@@ -15,7 +15,7 @@ import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class AppointmentService {
-    public static void createAppointment() throws IOException { 
+    public void createAppointment() throws IOException { 
         final String patientCpf;
         final String doctorCrm;
         Date appointmentDate;
@@ -69,7 +69,7 @@ public class AppointmentService {
         }
     }
 
-    public static String getAppointment(String id) throws IOException {
+    public String getAppointment(String id) throws IOException {
         try {   
             return AppointmentDao.getAppointment(id);
         } catch (IOException e) {
@@ -77,7 +77,7 @@ public class AppointmentService {
         }
     }
 
-    public static void updateAppointment() throws IOException {
+    public void updateAppointment() throws IOException {
         List<Appointment> appointments = listAppointments();
         int number = 1;
 
@@ -112,7 +112,7 @@ public class AppointmentService {
         }
     }
 
-    public static List<Appointment> listAppointments() throws IOException {
+    public List<Appointment> listAppointments() throws IOException {
         try {
             String json = AppointmentDao.listAppointments();
             List<Appointment> appointments = JsonParser.parseJson(json, Appointment.class);
@@ -123,7 +123,7 @@ public class AppointmentService {
         }
     }
 
-    public static void listAppointmentsView() throws IOException {
+    public void listAppointmentsView() throws IOException {
         try {
             List<Appointment> appointments = listAppointments();
 

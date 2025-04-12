@@ -14,7 +14,7 @@ import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class DoctorService {
-    public static void createDoctor() throws IOException {
+    public void createDoctor() throws IOException {
         String name = ReadValues.readName("Digite o nome do médico: ");
         String cpf = ReadValues.readCpf("Digite o CPF do médico: ");
         String phone = ReadValues.readPhone("Digite o telefone do médico: ");
@@ -31,7 +31,7 @@ public class DoctorService {
         }
     }
 
-    public static void getDoctor() throws IOException {
+    public void getDoctor() throws IOException {
         String crm = ReadValues.readCrm("Digite o CRM do médico: ");
         try {
             DoctorDao.getDoctor(crm);
@@ -40,7 +40,7 @@ public class DoctorService {
         }
     }
 
-    public static void updateDoctor() throws IOException { 
+    public void updateDoctor() throws IOException { 
         List<Doctor> doctors = listDoctors();
         int number = 1;
 
@@ -63,7 +63,7 @@ public class DoctorService {
         }
     }
 
-    public static void deleteDoctor() throws IOException {
+    public void deleteDoctor() throws IOException {
         String crm = ReadValues.readCrm("Digite o CRM do médico: ");
         try {
             DoctorDao.deleteDoctor(crm);
@@ -72,7 +72,7 @@ public class DoctorService {
         }
     }
 
-    public static void listDoctorsView() throws IOException {
+    public void listDoctorsView() throws IOException {
         try {
             String json = DoctorDao.listDoctors();
             List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);
@@ -91,7 +91,7 @@ public class DoctorService {
         }
     }
 
-    public static List<Doctor> listDoctors() throws IOException {
+    public List<Doctor> listDoctors() throws IOException {
         try {
             String json = DoctorDao.listDoctors();
             List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);

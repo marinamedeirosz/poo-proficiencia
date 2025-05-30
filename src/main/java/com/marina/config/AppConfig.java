@@ -7,7 +7,7 @@ public class AppConfig {
     private final int readTimeout;
 
     private AppConfig() {
-        this.baseUrl = "https://your-apex-server/ords/your-schema/";
+        this.baseUrl = "https://apex.oracle.com/pls/apex/mmcp/nutri/";
         this.connectionTimeout = 5000;
         this.readTimeout = 5000;
     }

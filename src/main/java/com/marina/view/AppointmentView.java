@@ -2,7 +2,7 @@ package com.marina.view;
 
 import java.io.IOException;
 
-import com.marina.services.AppointmentService;
+import com.marina.services.DoctorService;
 import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 import com.marina.view.MenuView.IMenuOption;
@@ -17,12 +17,14 @@ public class AppointmentView {
         "[4] - Voltar"
     };
     
+    private static final DoctorService doctorService = new DoctorService();
+
     private static final IMenuOption[] METHODS = {
-        () -> AppointmentService.createAppointment(),
-        () -> AppointmentService.listAppointmentsView(),
-        () -> AppointmentService.updateAppointment(),
+        () -> doctorService.createDoctor(),
+        () -> doctorService.listDoctorsView(),
         () -> showMenu()
     };
+    
 
     public static void showAppointmentMenu() throws IOException {
         while (true) {

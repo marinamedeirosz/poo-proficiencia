@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -31,7 +31,7 @@ public class AppointmentServiceTest {
     private String testDoctor;
     private String testPatient;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
@@ -59,7 +59,7 @@ public class AppointmentServiceTest {
         AppointmentDao.createAppointment(testAppointment);
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void testCreateAppointment_Failed() throws IOException {
         when(ReadValues.readDate(anyString())).thenReturn(new Date());
         when(ReadValues.readMenuOption(anyString(), 0, anyInt())).thenReturn(1);

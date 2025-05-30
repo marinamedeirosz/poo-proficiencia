@@ -62,14 +62,6 @@ public class PatientService {
         }
     }
 
-    public static void deletePatient() throws IOException {
-        String cpf = ReadValues.readCpf("Digite o CPF do paciente: ");
-        try {
-            PatientDao.deletePatient(cpf);
-        } catch (IOException e) {
-            throw new IOException("Erro ao deletar paciente: " + e.getMessage());
-        }   
-    }
 
     public static List<Patient> listPatients() throws IOException {
         try {

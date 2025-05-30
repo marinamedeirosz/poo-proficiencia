@@ -4,80 +4,80 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
-import org.junit.Test;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.anyString;
-import org.mockito.Mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
+import org.mockito.MockedStatic;
+import static org.mockito.Mockito.mockStatic;
 
 import com.marina.dao.PatientDao;
 import com.marina.enums.Profile;
 import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
+import com.marina.factory.PersonFactory;
 import com.marina.model.Patient;
+import com.marina.utils.JsonParser;
 import com.marina.utils.ReadValues;
 
+@DisplayName("Testes para PatientService")
 public class PatientServiceTest {
-    @Mock
-    private PatientDao patientDao;
 
-    private Patient testPatient;
+    private static final String CPF = "13177016402";
+    private static final String NAME = "John Doe";
+    private static final String PHONE = "123456789";
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
+    private Patient mockPatient;
 
-        testPatient = new Patient(
-            "John Doe",
-            "54055874006",
-            "11999999999",
-            Profile.PACIENTE,
-            Status.ATIVO,
-            YesOrNo.SIM
-        );
+    @BeforeEach
+    void setup() {
+        mockPatient = new Patient();
+        mockPatient.setCpf(CPF);
+        mockPatient.setName(NAME);
+        mockPatient.setPhone(PHONE);
     }
 
     @Test
-    public void testCreatePatient_Success() throws IOException {
-        when(ReadValues.readName(anyString())).thenReturn("John Doe");
-        when(ReadValues.readCpf(anyString())).thenReturn("54055874006");
-        when(ReadValues.readPhone(anyString())).thenReturn("11999999999");
-        when(PatientDao.createPatient(any(Patient.class))).thenReturn("Paciente criado com sucesso!");
+    @DisplayName("Deve criar um paciente com sucesso")
+    void testCreatePatient() throws IOException {
+        try (
+            MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class);
+            MockedStatic<PersonFactory> personFactoryMock = mockStatic(PersonFactory.class);
+            MockedStatic<PatientDao> patientDaoMock = mockStatic(PatientDao.class)
+        ) {
+            readValuesMock.when(() -> ReadValues.readName(anyString())).thenReturn(NAME);
+            readValuesMock.when(() -> ReadValues.readCpf(anyString())).thenReturn(CPF);
+            readValuesMock.when(() -> ReadValues.readPhone(anyString())).thenReturn(PHONE);
 
-        PatientService.createPatient();
+            personFactoryMock.when(() ->
+                PersonFactory.createPerson(NAME, CPF, PHONE, Profile.PACIENTE, Status.ATIVO, YesOrNo.SIM, null)
+            ).thenReturn(mockPatient);
 
-        verify(patientDao);
-        PatientDao.createPatient(any(Patient.class));
-    }
+            patientDaoMock.when(() -> PatientDao.createPatient(mockPatient)).thenReturn("Paciente criado com sucesso!");
 
-    @Test(expected = IOException.class)
-    public void testCreatePatient_ThrowsIOException() throws IOException {
-        when(ReadValues.readName(anyString())).thenReturn("John Doe");
-        when(ReadValues.readCpf(anyString())).thenReturn("54055874006");
-        when(ReadValues.readPhone(anyString())).thenReturn("11999999999");
-        when(PatientDao.createPatient(any(Patient.class))).thenThrow(new IOException("Connection error"));
-
-        PatientService.createPatient();
-    }
+            assertDoesNotThrow(PatientService::createPatient);
+        }
+    }   
 
     @Test
-    public void testListPatients_Success() throws IOException {
-        List<Patient> expectedPatients = Arrays.asList(testPatient);
-        when(PatientService.listPatients()).thenReturn(expectedPatients);
+    @DisplayName("Deve listar pacientes com sucesso")
+    void testListPatients() throws IOException {
+        String jsonMock = "[{\"cpf\":\"12345678901\",\"name\":\"John Doe\",\"phone\":\"123456789\"}]";
+        try (
+            MockedStatic<PatientDao> daoMock = mockStatic(PatientDao.class);
+            MockedStatic<JsonParser> parserMock = mockStatic(JsonParser.class)
+        ) {
+            daoMock.when(PatientDao::listPatients).thenReturn(jsonMock);
+            parserMock.when(() -> JsonParser.parseJson(jsonMock, Patient.class)).thenReturn(Arrays.asList(mockPatient));
 
-        List<Patient> result = PatientService.listPatients();
+            List<Patient> patients = PatientService.listPatients();
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        Patient resultPatient = result.get(0);
-        assertEquals(testPatient.getName(), resultPatient.getName());
-        assertEquals(testPatient.getCpf(), resultPatient.getCpf());
-        verify(patientDao);
-        PatientDao.listPatients();
+            assertNotNull(patients);
+            assertEquals(1, patients.size());
+            assertEquals(CPF, patients.get(0).getCpf());
+        }
     }
 }

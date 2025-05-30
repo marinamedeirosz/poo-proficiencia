@@ -20,7 +20,6 @@ public class ConnectionDao {
     private static final int READ_TIMEOUT = AppConfig.getInstance().getReadTimeout();
 
     private static HttpURLConnection setupConnection(String endpoint, String method) throws IOException {
-        @SuppressWarnings("deprecation")
         URL url = new URL(BASE_URL + endpoint);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(method);

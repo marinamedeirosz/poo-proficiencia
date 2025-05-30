@@ -12,6 +12,7 @@ import com.marina.dao.AuthDao;
 import com.marina.utils.ReadValues;
 
 class AuthServiceTest {
+    private final AuthService authService = new AuthService();
 
     @Test
     @DisplayName("Should login successfully with valid credentials")
@@ -19,15 +20,12 @@ class AuthServiceTest {
         try (MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class);
              MockedStatic<AuthDao> authDaoMock = mockStatic(AuthDao.class)) {
 
-            // Arrange
             readValuesMock.when(() -> ReadValues.readString("Digite o login: ")).thenReturn("m.medeiros");
             readValuesMock.when(() -> ReadValues.readString("Digite a senha: ")).thenReturn("123");
             authDaoMock.when(() -> AuthDao.login("m.medeiros", "123")).thenReturn("Autenticado com sucesso.");
 
-            // Act
-            String result = AuthService.login();
+            String result = authService.login();
 
-            // Assert
             assertEquals("Autenticado com sucesso.", result);
             readValuesMock.verify(() -> ReadValues.readString("Digite o login: "));
             readValuesMock.verify(() -> ReadValues.readString("Digite a senha: "));
@@ -41,15 +39,12 @@ class AuthServiceTest {
         try (MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class);
              MockedStatic<AuthDao> authDaoMock = mockStatic(AuthDao.class)) {
 
-            // Arrange
             readValuesMock.when(() -> ReadValues.readString("Digite o login: ")).thenReturn("newuser");
             readValuesMock.when(() -> ReadValues.readString("Digite a senha: ")).thenReturn("newpass");
             authDaoMock.when(() -> AuthDao.register("newuser", "newpass")).thenReturn("Usuário criado com sucesso!");
 
-            // Act
-            String result = AuthService.register();
+            String result = authService.register();
 
-            // Assert
             assertEquals("Usuário criado com sucesso!", result);
             readValuesMock.verify(() -> ReadValues.readString("Digite o login: "));
             readValuesMock.verify(() -> ReadValues.readString("Digite a senha: "));

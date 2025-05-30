@@ -13,9 +13,11 @@ public class AuthView {
         "[3] - Sair"
     };
 
+    private static final AuthService authService = new AuthService();
+
     private static final IMenuOption[] METHODS = {
-        () -> AuthService.login(),
-        () -> AuthService.register(),
+        () -> authService.login(),
+        () -> authService.register(),
         () -> {
             System.exit(0);
         return null;

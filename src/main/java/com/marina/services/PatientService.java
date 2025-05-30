@@ -62,18 +62,6 @@ public class PatientService {
         }
     }
 
-<<<<<<< HEAD
-=======
-    public void deletePatient() throws IOException {
-        String cpf = ReadValues.readCpf("Digite o CPF do paciente: ");
-        try {
-            PatientDao.deletePatient(cpf);
-        } catch (IOException e) {
-            throw new IOException("Erro ao deletar paciente: " + e.getMessage());
-        }   
-    }
->>>>>>> 3ef5cff68c3e3765b1dacc9dd4b44500f9f18e66
-
     public List<Patient> listPatients() throws IOException {
         try {
             String json = PatientDao.listPatients();

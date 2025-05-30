@@ -31,6 +31,9 @@ public class AppointmentServiceTest {
     private String testDoctor;
     private String testPatient;
 
+    final AppointmentService appointmentService = new AppointmentService();
+
+
     @BeforeAll
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -53,7 +56,7 @@ public class AppointmentServiceTest {
         when(ReadValues.readMenuOption(anyString(), 0, anyInt())).thenReturn(1);
         when(AppointmentDao.createAppointment(any(Appointment.class))).thenReturn("Consulta criada com sucesso!");
 
-        AppointmentService.createAppointment();
+        appointmentService.createAppointment();
 
         verify(appointmentDao);
         AppointmentDao.createAppointment(testAppointment);
@@ -65,16 +68,16 @@ public class AppointmentServiceTest {
         when(ReadValues.readMenuOption(anyString(), 0, anyInt())).thenReturn(1);
         when(AppointmentDao.createAppointment(any(Appointment.class))).thenThrow(new IOException("Creation failed"));
 
-        AppointmentService.createAppointment();
+        appointmentService.createAppointment();
     }
 
     @Test
     public void testListAppointments_Success() throws IOException {
         List<Appointment> expectedAppointments = Arrays.asList(testAppointment);
 
-        when(AppointmentService.listAppointments()).thenReturn(expectedAppointments);
+        when(appointmentService.listAppointments()).thenReturn(expectedAppointments);
 
-        List<Appointment> result = AppointmentService.listAppointments();
+        List<Appointment> result = appointmentService.listAppointments();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -88,7 +91,7 @@ public class AppointmentServiceTest {
         doNothing().when(appointmentDao);
         AppointmentDao.updateAppointment(any(Appointment.class));
 
-        AppointmentService.updateAppointment();
+        appointmentService.updateAppointment();
 
         verify(appointmentDao);
         AppointmentDao.updateAppointment(testAppointment);

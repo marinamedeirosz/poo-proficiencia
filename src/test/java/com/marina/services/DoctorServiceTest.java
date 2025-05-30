@@ -32,6 +32,8 @@ public class DoctorServiceTest {
     private static final String CRM = "123456";
 
     private Doctor mockDoctor;
+    final DoctorService doctorService = new DoctorService();
+
 
     @BeforeEach
     void setup() {
@@ -61,7 +63,7 @@ public class DoctorServiceTest {
 
             DoctorDaoMock.when(() -> DoctorDao.createDoctor(mockDoctor)).thenReturn("Médico criado com sucesso!");
 
-            assertDoesNotThrow(DoctorService::createDoctor);
+            assertDoesNotThrow(doctorService::createDoctor);
         }
     }   
 
@@ -76,7 +78,7 @@ public class DoctorServiceTest {
             daoMock.when(DoctorDao::listDoctors).thenReturn(jsonMock);
             parserMock.when(() -> JsonParser.parseJson(jsonMock, Doctor.class)).thenReturn(Arrays.asList(mockDoctor));
 
-            List<Doctor> Doctors = DoctorService.listDoctors();
+            List<Doctor> Doctors = doctorService.listDoctors();
 
             assertNotNull(Doctors);
             assertEquals(1, Doctors.size());

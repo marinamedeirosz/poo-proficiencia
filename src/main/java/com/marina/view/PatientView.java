@@ -15,9 +15,11 @@ public class PatientView {
         "[3] - Voltar"
     };
 
+    private static final PatientService patientService = new PatientService();
+
     private static final IMenuOption[] METHODS = {
-        () -> PatientService.createPatient(),
-        () -> PatientService.listPatientsView(),
+        () -> patientService.createPatient(),
+        () -> patientService.listPatientsView(),
         () -> showMenu()
     };
 

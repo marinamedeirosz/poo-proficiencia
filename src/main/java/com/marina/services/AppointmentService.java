@@ -20,8 +20,11 @@ public class AppointmentService {
         final String doctorCrm;
         Date appointmentDate;
 
-        List<Doctor> doctors = DoctorService.listDoctors();
-        DoctorService.listDoctorsView();
+        final DoctorService doctorService = new DoctorService();
+        final PatientService patientService = new PatientService();
+
+        List<Doctor> doctors = doctorService.listDoctors();
+        doctorService.listDoctorsView();
         while (true) {
             String tempCrm = ReadValues.readCrm("Digite o CRM do médico: ");
             if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm)) && doctors.stream().anyMatch(d -> d.getStatus() == Status.ATIVO)) {
@@ -31,8 +34,8 @@ public class AppointmentService {
             System.out.println("CRM inválido. Escolha um médico válido e ativo.");
         }
 
-        List<Patient> patients = PatientService.listPatients();
-        PatientService.listPatientsView();
+        List<Patient> patients = patientService.listPatients();
+        patientService.listPatientsView();
         while (true) {
             String tempCpf = ReadValues.readCpf("Digite o CPF do paciente: ");
             if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf)) && patients.stream().anyMatch(p -> p.getStatus() == Status.ATIVO)) {

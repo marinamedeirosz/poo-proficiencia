@@ -18,7 +18,7 @@ public class SpecialtyDao {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + id);
     }
 
-    public static String listSpecialtys() throws IOException {
+    public static String listSpecialties() throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT);
     }
 }

@@ -13,7 +13,9 @@ public class DoctorView {
     private static final String[] OPTIONS = {
         "[1] - Cadastrar Médico",
         "[2] - Listar Médicos",
-        "[3] - Voltar"
+        "[3] - Adicionar Especialidade",
+        "[4] - Listar Especialidades",
+        "[5] - Voltar"
     };
 
     private static final DoctorService doctorService = new DoctorService();
@@ -21,6 +23,8 @@ public class DoctorView {
     private static final IMenuOption[] METHODS = {
         () -> doctorService.createDoctor(),
         () -> doctorService.listDoctorsView(),
+        () -> doctorService.addSpecialty(),
+        () -> doctorService.listSpecialtiesView(),
         () -> showMenu()
     };
     
@@ -31,7 +35,7 @@ public class DoctorView {
                 System.out.println(option);
             }
             Style.printLine(50);
-            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 4);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 6);
             METHODS[option - 1].run();
         }
     }

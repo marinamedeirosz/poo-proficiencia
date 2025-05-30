@@ -2,32 +2,28 @@ package com.marina.view;
 
 import java.io.IOException;
 
-import com.marina.services.AppointmentService;
+import com.marina.services.SpecialtyService;
 import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 import com.marina.view.MenuView.IMenuOption;
 import static com.marina.view.MenuView.showMenu;
 
-
-public class AppointmentView {
+public class SpecialtyView {
     private static final String[] OPTIONS = {
-        "[1] - Cadastrar Consulta",
-        "[2] - Listar Consultas",
-        "[3] - Atualizar Consulta",
-        "[4] - Voltar"
+        "[1] - Cadastrar Especialidade",
+        "[2] - Listar Especialidades",
+        "[3] - Voltar"
     };
-    
-    private static final AppointmentService appointmentService = new AppointmentService();
+
+    private static final SpecialtyService specialtyService = new SpecialtyService();
 
     private static final IMenuOption[] METHODS = {
-        () -> appointmentService.createAppointment(),
-        () -> appointmentService.listAppointmentsView(),
-        () -> appointmentService.updateAppointment(),
+        () -> specialtyService.createSpecialty(),
+        () -> specialtyService.listSpecialtiesView(),
         () -> showMenu()
     };
-    
 
-    public static void showAppointmentMenu() throws IOException {
+    public static void showSpecialtyMenu() throws IOException {
         while (true) {
             System.out.println("Selecione uma opção:");
             for (String option : OPTIONS) {
@@ -37,5 +33,5 @@ public class AppointmentView {
             int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 4);
             METHODS[option - 1].run();
         }
-    }    
+    }
 }

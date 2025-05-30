@@ -9,13 +9,15 @@ public class MenuView {
     private static final String[] OPTIONS = {
         "[1] - Pacientes",
         "[2] - Médicos",
-        "[3] - Consultas",
-        "[4] - Sair"
+        "[3] - Especialidades",
+        "[4] - Consultas",
+        "[5] - Sair"
     };
 
     private static final IMenuOption[] METHODS = {
         () -> PatientView.showPatientMenu(),
         () -> DoctorView.showDoctorMenu(),
+        () -> SpecialtyView.showSpecialtyMenu(),
         () -> AppointmentView.showAppointmentMenu(),
         () -> System.exit(0)
     };
@@ -32,7 +34,7 @@ public class MenuView {
                 System.out.println(option);
             }
             Style.printLine(50);
-            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 4);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 5);
             METHODS[option - 1].run();
         }
     }

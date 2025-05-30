@@ -6,7 +6,7 @@ import com.marina.dao.AuthDao;
 import com.marina.utils.ReadValues;
 
 public class AuthService {
-    public static String login() throws IOException {
+    public String login() throws IOException {
         String login = ReadValues.readString("Digite o login: ");
         String password = ReadValues.readString("Digite a senha: ");
 
@@ -14,7 +14,7 @@ public class AuthService {
         return response;
     }
 
-    public static String register() throws IOException {
+    public String register() throws IOException {
         String login = ReadValues.readString("Digite o login: ");
         String password = ReadValues.readString("Digite a senha: ");
     

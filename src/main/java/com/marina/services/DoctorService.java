@@ -14,7 +14,7 @@ import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class DoctorService {
-    public static void createDoctor() throws IOException {
+    public void createDoctor() throws IOException {
         String name = ReadValues.readName("Digite o nome do médico: ");
         String cpf = ReadValues.readCpf("Digite o CPF do médico: ");
         String phone = ReadValues.readPhone("Digite o telefone do médico: ");
@@ -31,7 +31,7 @@ public class DoctorService {
         }
     }
 
-    public static void getDoctor() throws IOException {
+    public void getDoctor() throws IOException {
         String crm = ReadValues.readCrm("Digite o CRM do médico: ");
         try {
             DoctorDao.getDoctor(crm);
@@ -40,7 +40,43 @@ public class DoctorService {
         }
     }
 
+<<<<<<< HEAD
     public static void listDoctorsView() throws IOException {
+=======
+    public void updateDoctor() throws IOException { 
+        List<Doctor> doctors = listDoctors();
+        int number = 1;
+
+        for (Doctor doctor : doctors) {
+            System.out.println(number + " - " + doctor.toString());
+            number++;
+        }
+
+        int doctorNumber = ReadValues.readMenuOption("Digite o número do médico: ", 1, number);
+        Doctor doctor = doctors.get(doctorNumber - 1);
+
+        String name = ReadValues.readName("Digite o nome do médico: ");
+        String phone = ReadValues.readPhone("Digite o telefone do médico: ");
+        Status status = ReadValues.readStatus("Digite a situação do médico: ");
+        Doctor doctorUpdated = (Doctor) PersonFactory.createPerson(name, doctor.getCpf(), phone, Profile.MEDICO, status, doctor.getUserAutomation(), doctor.getCrm());
+        try {
+            DoctorDao.updateDoctor(doctorUpdated);
+        } catch (IOException e) {
+            throw new IOException("Erro ao atualizar médico: " + e.getMessage());
+        }
+    }
+
+    public void deleteDoctor() throws IOException {
+        String crm = ReadValues.readCrm("Digite o CRM do médico: ");
+        try {
+            DoctorDao.deleteDoctor(crm);
+        } catch (IOException e) {
+            throw new IOException("Erro ao deletar médico: " + e.getMessage());
+        }
+    }
+
+    public void listDoctorsView() throws IOException {
+>>>>>>> 3ef5cff68c3e3765b1dacc9dd4b44500f9f18e66
         try {
             String json = DoctorDao.listDoctors();
             List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);
@@ -59,7 +95,7 @@ public class DoctorService {
         }
     }
 
-    public static List<Doctor> listDoctors() throws IOException {
+    public List<Doctor> listDoctors() throws IOException {
         try {
             String json = DoctorDao.listDoctors();
             List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);

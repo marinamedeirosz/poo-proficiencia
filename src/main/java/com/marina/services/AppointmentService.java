@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import com.marina.dao.AppointmentDao;
+import com.marina.dao.interfaces.AppointmentDao;
 import com.marina.enums.AppointmentStatus;
 import com.marina.enums.Status;
 import com.marina.model.Appointment;
@@ -15,19 +15,29 @@ import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class AppointmentService {
+
+    private final AppointmentDao appointmentDao;
+    private final DoctorService doctorService;
+    private final PatientService patientService;
+
+    public AppointmentService(AppointmentDao appointmentDao, DoctorService doctorService, PatientService patientService) {
+        this.appointmentDao = appointmentDao;
+        this.doctorService = doctorService;
+        this.patientService = patientService;
+    }
+
     public void createAppointment() throws IOException { 
         final String patientCpf;
         final String doctorCrm;
         Date appointmentDate;
 
-        final DoctorService doctorService = new DoctorService();
-        final PatientService patientService = new PatientService();
-
         List<Doctor> doctors = doctorService.listDoctors();
         doctorService.listDoctorsView();
+
         while (true) {
             String tempCrm = ReadValues.readCrm("Digite o CRM do médico: ");
-            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm)) && doctors.stream().anyMatch(d -> d.getStatus() == Status.ATIVO)) {
+            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm)) && 
+                doctors.stream().anyMatch(d -> d.getStatus() == Status.ATIVO)) {
                 doctorCrm = tempCrm;
                 break;
             }
@@ -36,9 +46,11 @@ public class AppointmentService {
 
         List<Patient> patients = patientService.listPatients();
         patientService.listPatientsView();
+
         while (true) {
             String tempCpf = ReadValues.readCpf("Digite o CPF do paciente: ");
-            if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf)) && patients.stream().anyMatch(p -> p.getStatus() == Status.ATIVO)) {
+            if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf)) && 
+                patients.stream().anyMatch(p -> p.getStatus() == Status.ATIVO)) {
                 patientCpf = tempCpf;
                 break;
             }
@@ -63,7 +75,7 @@ public class AppointmentService {
         Appointment appointment = new Appointment(doctorCrm, patientCpf, appointmentDate, observation, status, "");
 
         try {
-            String response = AppointmentDao.createAppointment(appointment);
+            String response = appointmentDao.createAppointment(appointment);
             Style.printLine(50);
             System.out.println(response);
             Style.printLine(50);
@@ -74,7 +86,7 @@ public class AppointmentService {
 
     public String getAppointment(String id) throws IOException {
         try {   
-            return AppointmentDao.getAppointment(id);
+            return appointmentDao.getAppointment(id);
         } catch (IOException e) {
             throw new IOException("Erro ao buscar consulta: " + e.getMessage());
         }
@@ -108,7 +120,7 @@ public class AppointmentService {
         appointment.setStatus(status);
         try {
             Style.printLine(50);
-            System.out.println(AppointmentDao.updateAppointment(appointment));
+            System.out.println(appointmentDao.updateAppointment(appointment));
             Style.printLine(50);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar consulta: " + e.getMessage());
@@ -117,9 +129,8 @@ public class AppointmentService {
 
     public List<Appointment> listAppointments() throws IOException {
         try {
-            String json = AppointmentDao.listAppointments();
+            String json = appointmentDao.listAppointments();
             List<Appointment> appointments = JsonParser.parseJson(json, Appointment.class);
-
             return appointments;
         } catch (IOException e) {
             throw new IOException("Erro ao listar consultas: " + e.getMessage());

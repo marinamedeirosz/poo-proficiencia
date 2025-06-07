@@ -3,7 +3,7 @@ package com.marina.services;
 import java.io.IOException;
 import java.util.List;
 
-import com.marina.dao.DoctorDao;
+import com.marina.dao.interfaces.DoctorDao;
 import com.marina.enums.Profile;
 import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
@@ -15,15 +15,24 @@ import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class DoctorService {
+
+    private final DoctorDao doctorDao;
+    private final SpecialtyService specialtyService;
+
+    public DoctorService(DoctorDao doctorDao, SpecialtyService specialtyService) {
+        this.doctorDao = doctorDao;
+        this.specialtyService = specialtyService;
+    }
+
     public void createDoctor() throws IOException {
         String name = ReadValues.readName("Digite o nome do médico: ");
         String cpf = ReadValues.readCpf("Digite o CPF do médico: ");
         String phone = ReadValues.readPhone("Digite o telefone do médico: ");
         String crm = ReadValues.readCrm("Digite o CRM do médico: ");
-    
+
         Doctor doctor = (Doctor) PersonFactory.createPerson(name, cpf, phone, Profile.MEDICO, Status.ATIVO, YesOrNo.SIM, crm);
         try {
-            String response = DoctorDao.createDoctor(doctor);
+            String response = doctorDao.createDoctor(doctor);
             Style.printLine(50);
             System.out.println(response);
             Style.printLine(50);
@@ -35,7 +44,8 @@ public class DoctorService {
     public void getDoctor() throws IOException {
         String crm = ReadValues.readCrm("Digite o CRM do médico: ");
         try {
-            DoctorDao.getDoctor(crm);
+            String json = doctorDao.getDoctor(crm);
+            System.out.println(json);
         } catch (IOException e) {
             throw new IOException("Erro ao buscar médico: " + e.getMessage());
         }
@@ -43,7 +53,7 @@ public class DoctorService {
 
     public void listDoctorsView() throws IOException {
         try {
-            String json = DoctorDao.listDoctors();
+            String json = doctorDao.listDoctors();
             List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);
 
             if (doctors.isEmpty()) {
@@ -62,26 +72,22 @@ public class DoctorService {
 
     public List<Doctor> listDoctors() throws IOException {
         try {
-            String json = DoctorDao.listDoctors();
-            List<Doctor> doctors = JsonParser.parseJson(json, Doctor.class);
-
-            return doctors;
+            String json = doctorDao.listDoctors();
+            return JsonParser.parseJson(json, Doctor.class);
         } catch (IOException e) {
             throw new IOException("Erro ao listar médicos: " + e.getMessage());
         }
     }
 
     public void addSpecialty() throws IOException {
-        final String doctorCrm;
+        List<Doctor> doctors = listDoctors();
+        listDoctorsView();
 
-        final DoctorService doctorService = new DoctorService();
-        final SpecialtyService specialtyService = new SpecialtyService();
-
-        List<Doctor> doctors = doctorService.listDoctors();
-        doctorService.listDoctorsView();
+        String doctorCrm;
         while (true) {
             String tempCrm = ReadValues.readCrm("Digite o CRM do médico: ");
-            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm)) && doctors.stream().anyMatch(d -> d.getStatus() == Status.ATIVO)) {
+            boolean validCrm = doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm) && d.getStatus() == Status.ATIVO);
+            if (validCrm) {
                 doctorCrm = tempCrm;
                 break;
             }
@@ -89,8 +95,6 @@ public class DoctorService {
         }
 
         List<Specialty> specialties = specialtyService.listSpecialties();
-        int number = 1;
-
         if (specialties.isEmpty()) {
             Style.printLine(50);
             System.out.println("Não existem especialidades cadastradas.");
@@ -98,6 +102,7 @@ public class DoctorService {
             return;
         }
 
+        int number = 1;
         for (Specialty specialty : specialties) {
             System.out.println("[ " + number + " ] - " + specialty.toString());
             Style.printLine(50);
@@ -111,23 +116,22 @@ public class DoctorService {
 
         try {
             Style.printLine(50);
-            System.out.println(DoctorDao.addSpecialty(doctorCrm, specialty.getId(), level));
+            System.out.println(doctorDao.addSpecialty(doctorCrm, specialty.getId(), level));
             Style.printLine(50);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar consulta: " + e.getMessage());
-        }        
-    } 
+        }
+    }
 
     public List<Specialty> listSpecialties() throws IOException {
-        final String doctorCrm;
+        List<Doctor> doctors = listDoctors();
+        listDoctorsView();
 
-        final DoctorService doctorService = new DoctorService();
-
-        List<Doctor> doctors = doctorService.listDoctors();
-        doctorService.listDoctorsView();
+        String doctorCrm;
         while (true) {
             String tempCrm = ReadValues.readCrm("Digite o CRM do médico: ");
-            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm)) && doctors.stream().anyMatch(d -> d.getStatus() == Status.ATIVO)) {
+            boolean validCrm = doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm) && d.getStatus() == Status.ATIVO);
+            if (validCrm) {
                 doctorCrm = tempCrm;
                 break;
             }
@@ -135,10 +139,8 @@ public class DoctorService {
         }
 
         try {
-            String json = DoctorDao.listSpecialties(doctorCrm);
-            List<Specialty> specialties = JsonParser.parseJson(json, Specialty.class);
-
-            return specialties;
+            String json = doctorDao.listSpecialties(doctorCrm);
+            return JsonParser.parseJson(json, Specialty.class);
         } catch (IOException e) {
             throw new IOException("Erro ao listar especialidades: " + e.getMessage());
         }
@@ -149,7 +151,7 @@ public class DoctorService {
             List<Specialty> specialties = listSpecialties();
 
             if (specialties.isEmpty()) {
-                System.out.println("Não existem especialidades cadastrados.");
+                System.out.println("Não existem especialidades cadastradas.");
                 return;
             }
 

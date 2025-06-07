@@ -3,7 +3,7 @@ package com.marina.services;
 import java.io.IOException;
 import java.util.List;
 
-import com.marina.dao.PatientDao;
+import com.marina.dao.interfaces.PatientDao;
 import com.marina.enums.Profile;
 import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
@@ -14,28 +14,26 @@ import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 
 public class PatientService {
+
+    private final PatientDao patientDao;
+
+    public PatientService(PatientDao patientDao) {
+        this.patientDao = patientDao;
+    }
+
     public void createPatient() throws IOException {
         String name = ReadValues.readName("Digite o nome do paciente: ");
         String cpf = ReadValues.readCpf("Digite o CPF do paciente: ");
         String phone = ReadValues.readPhone("Digite o telefone do paciente: ");
-    
+
         Patient patient = (Patient) PersonFactory.createPerson(name, cpf, phone, Profile.PACIENTE, Status.ATIVO, YesOrNo.SIM, null);
         try {
-            String response = PatientDao.createPatient(patient);
+            String response = patientDao.createPatient(patient);
             Style.printLine(50);
             System.out.println(response);
             Style.printLine(50);
         } catch (IOException e) {
             throw new IOException("Erro ao criar paciente: " + e.getMessage());
-        }
-    }
-
-    public void getPatient() throws IOException {
-        String cpf = ReadValues.readCpf("Digite o CPF do paciente: ");
-        try {
-            PatientDao.getPatient(cpf);
-        } catch (IOException e) {
-            throw new IOException("Erro ao buscar paciente: " + e.getMessage());
         }
     }
 
@@ -47,7 +45,7 @@ public class PatientService {
             System.out.println(number + " - " + patient.toString());
             number++;
         }
-        int patientNumber = ReadValues.readMenuOption("Digite o número do paciente: ", 1, number);
+        int patientNumber = ReadValues.readMenuOption("Digite o número do paciente: ", 1, number - 1);
         Patient patient = patients.get(patientNumber - 1);
 
         String name = ReadValues.readName("Digite o nome do paciente: ");
@@ -56,7 +54,7 @@ public class PatientService {
 
         Patient patientUpdated = (Patient) PersonFactory.createPerson(name, patient.getCpf(), phone, Profile.PACIENTE, status, YesOrNo.SIM, null);
         try {
-            PatientDao.updatePatient(patientUpdated);
+            patientDao.updatePatient(patientUpdated);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar paciente: " + e.getMessage());
         }
@@ -64,7 +62,7 @@ public class PatientService {
 
     public List<Patient> listPatients() throws IOException {
         try {
-            String json = PatientDao.listPatients();
+            String json = patientDao.listPatients();
             List<Patient> patients = JsonParser.parseJson(json, Patient.class);
 
             return patients;

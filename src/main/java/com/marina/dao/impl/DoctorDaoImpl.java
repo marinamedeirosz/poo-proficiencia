@@ -1,14 +1,17 @@
-package com.marina.dao;
+package com.marina.dao.impl;
 
 import java.io.IOException;
 
+import com.marina.dao.ConnectionDao;
+import com.marina.dao.interfaces.DoctorDao;
 import com.marina.model.Doctor;
 
-public class DoctorDao {
+public class DoctorDaoImpl implements DoctorDao {
     private static final String ENDPOINT = "medico";
     private static final String SUBENDPOINT = "especialidade";
 
-    public static String createDoctor(Doctor doc) throws IOException {
+    @Override
+    public String createDoctor(Doctor doc) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + doc.getName() + "\","
                 + "\"cpf\": \"" + doc.getCpf() + "\","
@@ -21,11 +24,13 @@ public class DoctorDao {
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
 
-    public static String getDoctor(String cpf) throws IOException {
+    @Override
+    public String getDoctor(String cpf) throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + cpf);
     }
-    
-    public static void updateDoctor(Doctor doc) throws IOException {
+
+    @Override
+    public void updateDoctor(Doctor doc) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + doc.getName() + "\","
                 + "\"phone\": \"" + doc.getPhone() + "\","
@@ -35,16 +40,19 @@ public class DoctorDao {
                 + "}";
         ConnectionDao.makePutRequest(ENDPOINT + "/" + doc.getCpf(), jsonData);
     }
-    
-    public static void deleteDoctor(String cpf) throws IOException {
+
+    @Override
+    public void deleteDoctor(String cpf) throws IOException {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + cpf);
     }
 
-    public static String listDoctors() throws IOException {
+    @Override
+    public String listDoctors() throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT);
     }
 
-    public static String addSpecialty(String crm, String specialty, Integer level) throws IOException {
+    @Override
+    public String addSpecialty(String crm, String specialty, Integer level) throws IOException {
         String jsonData = "{"
                 + "\"speId\": \"" + specialty + "\","
                 + "\"speLvl\": \"" + level + "\""
@@ -52,7 +60,8 @@ public class DoctorDao {
         return ConnectionDao.makePostRequest(ENDPOINT + "/" + crm + "/" + SUBENDPOINT, jsonData);
     }
 
-    public static String listSpecialties(String crm) throws IOException {
+    @Override
+    public String listSpecialties(String crm) throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + crm + "/" + SUBENDPOINT);
     }
 }

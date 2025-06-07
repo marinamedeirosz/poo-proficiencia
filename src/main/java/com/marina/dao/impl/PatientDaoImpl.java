@@ -1,13 +1,16 @@
-package com.marina.dao;
+package com.marina.dao.impl;
 
 import java.io.IOException;
 
+import com.marina.dao.ConnectionDao;
+import com.marina.dao.interfaces.PatientDao;
 import com.marina.model.Patient;
 
-public class PatientDao {
+public class PatientDaoImpl implements PatientDao {
     private static final String ENDPOINT = "paciente";
 
-    public static String createPatient(Patient patient) throws IOException {
+    @Override
+    public String createPatient(Patient patient) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + patient.getName() + "\","
                 + "\"cpf\": \"" + patient.getCpf() + "\","
@@ -19,11 +22,13 @@ public class PatientDao {
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
 
-    public static String getPatient(String cpf) throws IOException {
+    @Override
+    public String getPatient(String cpf) throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + cpf);
     }
 
-    public static void updatePatient(Patient patient) throws IOException {
+    @Override
+    public void updatePatient(Patient patient) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + patient.getName() + "\","
                 + "\"phone\": \"" + patient.getPhone() + "\","
@@ -32,12 +37,14 @@ public class PatientDao {
                 + "}";
         ConnectionDao.makePutRequest(ENDPOINT + "/" + patient.getCpf(), jsonData);
     }
-    
-    public static void deletePatient(String cpf) throws IOException {
+
+    @Override
+    public void deletePatient(String cpf) throws IOException {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + cpf);
     }
 
-    public static String listPatients() throws IOException {
+    @Override
+    public String listPatients() throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT);
     }
 }

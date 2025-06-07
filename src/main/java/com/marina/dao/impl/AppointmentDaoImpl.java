@@ -1,13 +1,16 @@
-package com.marina.dao;
+package com.marina.dao.impl;
 
 import java.io.IOException;
 
+import com.marina.dao.ConnectionDao;
+import com.marina.dao.interfaces.AppointmentDao;
 import com.marina.model.Appointment;
 
-public class AppointmentDao {
+public class AppointmentDaoImpl implements AppointmentDao {
     private static final String ENDPOINT = "consulta";
 
-    public static String createAppointment(Appointment appointment) throws IOException {
+    @Override
+    public String createAppointment(Appointment appointment) throws IOException {
         String jsonData = "{"
                 + "\"doctorCpf\": \"" + appointment.getDoctor() + "\","
                 + "\"patientCpf\": \"" + appointment.getPatient() + "\","
@@ -15,25 +18,29 @@ public class AppointmentDao {
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
-    
-    public static String getAppointment(String id) throws IOException {
+
+    @Override
+    public String getAppointment(String id) throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT + "/" + id);
     }
-    
-    public static String updateAppointment(Appointment appointment) throws IOException {
+
+    @Override
+    public String updateAppointment(Appointment appointment) throws IOException {
         String jsonData = "{"
                 + "\"observation\": \"" + appointment.getObservation() + "\","
                 + "\"status\": \"" + appointment.getStatus().getCode() + "\","
                 + "\"id\": \"" + appointment.getId() + "\""
                 + "}";
-        return ConnectionDao.makePutRequest(ENDPOINT + "/" + appointment.getId(), jsonData);    
+        return ConnectionDao.makePutRequest(ENDPOINT + "/" + appointment.getId(), jsonData);
     }
-    
-    public static void deleteAppointment(String id) throws IOException {
+
+    @Override
+    public void deleteAppointment(String id) throws IOException {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + id);
     }
 
-    public static String listAppointments() throws IOException {
+    @Override
+    public String listAppointments() throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT);
     }
 }

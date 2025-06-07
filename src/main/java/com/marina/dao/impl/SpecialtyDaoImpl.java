@@ -1,24 +1,24 @@
-package com.marina.dao;
+package com.marina.dao.impl;
 
 import java.io.IOException;
 
+import com.marina.dao.ConnectionDao;
+import com.marina.dao.interfaces.SpecialtyDao;
 import com.marina.model.Specialty;
 
-public class SpecialtyDao {
+public class SpecialtyDaoImpl implements SpecialtyDao {
     private static final String ENDPOINT = "especialidade";
 
-    public static String createSpecialty(Specialty specialty) throws IOException {
+    @Override
+    public String createSpecialty(Specialty specialty) throws IOException {
         String jsonData = "{"
                 + "\"description\": \"" + specialty.getDescription() + "\""
                 + "}";
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
-    
-    public static void deleteSpecialty(Integer id) throws IOException {
-        ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + id);
-    }
 
-    public static String listSpecialties() throws IOException {
+    @Override
+    public String listSpecialties() throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT);
     }
 }

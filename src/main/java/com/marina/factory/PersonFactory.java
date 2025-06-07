@@ -12,12 +12,13 @@ public class PersonFactory {
 
     public static Person createPerson(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation, String crm) {
        switch (profile) {
-            case MEDICO:
+            case MEDICO -> {
                 return new Doctor(name, cpf, phone, profile, status, userAutomation, crm);
-            case PACIENTE:
+            }
+            case PACIENTE -> {
                 return new Patient(name, cpf, phone, profile, status, userAutomation);
-            default:
-                throw new InvalidProfileException(profile.toString());
+            }
+            default -> throw new InvalidProfileException(profile.toString());
         }
     }
 }

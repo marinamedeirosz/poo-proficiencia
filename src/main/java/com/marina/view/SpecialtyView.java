@@ -2,6 +2,7 @@ package com.marina.view;
 
 import java.io.IOException;
 
+import com.marina.dao.impl.SpecialtyDaoImpl;
 import com.marina.services.SpecialtyService;
 import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
@@ -15,7 +16,7 @@ public class SpecialtyView {
         "[3] - Voltar"
     };
 
-    private static final SpecialtyService specialtyService = new SpecialtyService();
+    private static final SpecialtyService specialtyService = new SpecialtyService(new SpecialtyDaoImpl());
 
     private static final IMenuOption[] METHODS = {
         () -> specialtyService.createSpecialty(),
@@ -30,7 +31,7 @@ public class SpecialtyView {
                 System.out.println(option);
             }
             Style.printLine(50);
-            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 4);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, OPTIONS.length);
             METHODS[option - 1].run();
         }
     }

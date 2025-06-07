@@ -2,6 +2,7 @@ package com.marina.view;
 
 import java.io.IOException;
 
+import com.marina.dao.impl.AuthDaoImpl;
 import com.marina.services.AuthService;
 import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
@@ -13,7 +14,7 @@ public class AuthView {
         "[3] - Sair"
     };
 
-    private static final AuthService authService = new AuthService();
+    private static final AuthService authService = new AuthService(new AuthDaoImpl());
 
     private static final IMenuOption[] METHODS = {
         () -> authService.login(),
@@ -34,7 +35,7 @@ public class AuthView {
             }
 
             Style.printLine(50);
-            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 3);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, OPTIONS.length);
             String response = METHODS[option - 1].run();
             if (response.equals("Autenticado com sucesso.")) {
                 MenuView.showMenu();

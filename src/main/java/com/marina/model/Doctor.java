@@ -1,7 +1,5 @@
 package com.marina.model;
 
-import java.util.List;
-
 import com.marina.enums.Profile;
 import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;
@@ -9,7 +7,7 @@ import com.marina.utils.Formatter;
 
 public class Doctor extends Person {
     private String crm;
-    private List<Specialty> specialties;
+    private String specialties;
 
     public Doctor(String name, String cpf, String phone, Profile profile, Status status, YesOrNo userAutomation, String crm) {
         super(name, cpf, phone, profile, status, userAutomation);
@@ -34,7 +32,8 @@ public class Doctor extends Person {
                "CPF: " + Formatter.formatCpf(getCpf()) + "\n" +
                "Telefone: " + Formatter.formatPhone(getPhone()) + "\n" +
                "CRM: " + Formatter.formatCrm(crm) + "\n" +
-               "Situação: " + getStatus().getText();
+               "Situação: " + getStatus().getText() + "\n" +
+               "Especialidades: " + specialties;
     }
     
     @Override

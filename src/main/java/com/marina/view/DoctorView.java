@@ -2,14 +2,17 @@ package com.marina.view;
 
 import java.io.IOException;
 
+import com.marina.dao.impl.DoctorDaoImpl;
+import com.marina.dao.impl.SpecialtyDaoImpl;
 import com.marina.services.DoctorService;
+import com.marina.services.SpecialtyService;
 import com.marina.utils.ReadValues;
 import com.marina.utils.Style;
 import com.marina.view.MenuView.IMenuOption;
 import static com.marina.view.MenuView.showMenu;
 
-
 public class DoctorView {
+
     private static final String[] OPTIONS = {
         "[1] - Cadastrar Médico",
         "[2] - Listar Médicos",
@@ -18,7 +21,7 @@ public class DoctorView {
         "[5] - Voltar"
     };
 
-    private static final DoctorService doctorService = new DoctorService();
+    private static final DoctorService doctorService = new DoctorService(new DoctorDaoImpl(), new SpecialtyService(new SpecialtyDaoImpl()));
 
     private static final IMenuOption[] METHODS = {
         () -> doctorService.createDoctor(),
@@ -27,7 +30,7 @@ public class DoctorView {
         () -> doctorService.listSpecialtiesView(),
         () -> showMenu()
     };
-    
+
     public static void showDoctorMenu() throws IOException {
         while (true) {
             System.out.println("Selecione uma opção:");
@@ -35,8 +38,8 @@ public class DoctorView {
                 System.out.println(option);
             }
             Style.printLine(50);
-            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, 6);
+            int option = ReadValues.readMenuOption("Digite a opção desejada: ", 1, OPTIONS.length);
             METHODS[option - 1].run();
         }
     }
-}   
+}

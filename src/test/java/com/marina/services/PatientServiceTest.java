@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.MockedStatic;
 import static org.mockito.Mockito.mockStatic;
 
-import com.marina.dao.PatientDao;
+import com.marina.dao.interfaces.PatientDao;
 import com.marina.enums.Profile;
 import com.marina.enums.Status;
 import com.marina.enums.YesOrNo;

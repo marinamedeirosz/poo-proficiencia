@@ -5,41 +5,38 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.BeforeAll;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.mockito.MockedStatic;
 
-import com.marina.dao.AppointmentDao;
+import static org.mockito.Mockito.*;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.marina.dao.interfaces.AppointmentDao;
 import com.marina.enums.AppointmentStatus;
 import com.marina.model.Appointment;
 import com.marina.utils.ReadValues;
 
 public class AppointmentServiceTest {
+
     @Mock
     private AppointmentDao appointmentDao;
 
+    private AppointmentService appointmentService;
+
     private Appointment testAppointment;
-    private String testDoctor;
-    private String testPatient;
+    private String testDoctor = "Dr Smith";
+    private String testPatient = "John Doe";
 
-    final AppointmentService appointmentService = new AppointmentService();
-
-
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        appointmentService = new AppointmentService(appointmentDao); // inject mock
 
-        testDoctor = "Dr Smith";
-        testPatient = "John Doe";
         testAppointment = new Appointment(
             testDoctor,
             testPatient,
@@ -51,49 +48,70 @@ public class AppointmentServiceTest {
     }
 
     @Test
+    @DisplayName("Should create appointment successfully")
     public void testCreateAppointment_Success() throws IOException {
-        when(ReadValues.readDate(anyString())).thenReturn(new Date());
-        when(ReadValues.readMenuOption(anyString(), 0, anyInt())).thenReturn(1);
-        when(AppointmentDao.createAppointment(any(Appointment.class))).thenReturn("Consulta criada com sucesso!");
+        try (MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class)) {
+            readValuesMock.when(() -> ReadValues.readDate(anyString())).thenReturn(new Date());
+            readValuesMock.when(() -> ReadValues.readMenuOption(anyString(), anyInt(), anyInt())).thenReturn(1);
 
-        appointmentService.createAppointment();
+            when(appointmentDao.createAppointment(any(Appointment.class))).thenReturn("Consulta criada com sucesso!");
 
-        verify(appointmentDao);
-        AppointmentDao.createAppointment(testAppointment);
+            String result = appointmentService.createAppointment();
+
+            assertEquals("Consulta criada com sucesso!", result);
+            verify(appointmentDao).createAppointment(any(Appointment.class));
+        }
     }
 
     @Test
+    @DisplayName("Should handle appointment creation failure")
     public void testCreateAppointment_Failed() throws IOException {
-        when(ReadValues.readDate(anyString())).thenReturn(new Date());
-        when(ReadValues.readMenuOption(anyString(), 0, anyInt())).thenReturn(1);
-        when(AppointmentDao.createAppointment(any(Appointment.class))).thenThrow(new IOException("Creation failed"));
+        try (MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class)) {
+            readValuesMock.when(() -> ReadValues.readDate(anyString())).thenReturn(new Date());
+            readValuesMock.when(() -> ReadValues.readMenuOption(anyString(), anyInt(), anyInt())).thenReturn(1);
 
-        appointmentService.createAppointment();
+            when(appointmentDao.createAppointment(any(Appointment.class))).thenThrow(new IOException("Creation failed"));
+
+            IOException thrown = assertThrows(IOException.class, () -> appointmentService.createAppointment());
+            assertEquals("Creation failed", thrown.getMessage());
+            verify(appointmentDao).createAppointment(any(Appointment.class));
+        }
     }
 
     @Test
     public void testListAppointments_Success() throws IOException {
-        List<Appointment> expectedAppointments = Arrays.asList(testAppointment);
-
-        when(appointmentService.listAppointments()).thenReturn(expectedAppointments);
-
+        // Mock JSON string returned by DAO
+        String jsonMock = "[{\"doctor\":\"Dr Smith\",\"patient\":\"John Doe\",\"date\":\"2025-06-07T10:00:00\",\"observation\":\"observacao\",\"status\":\"A\",\"id\":\"1\"}]";
+    
+        // Mock DAO to return JSON string
+        when(appointmentDao.listAppointments()).thenReturn(jsonMock);
+    
+        // Call service method which will parse JSON internally
         List<Appointment> result = appointmentService.listAppointments();
-
+    
+        // Validate result
         assertNotNull(result);
         assertFalse(result.isEmpty());
-        verify(appointmentDao);
+        assertEquals(testAppointment.getDoctor(), result.get(0).getDoctor());
+    
+        // Verify DAO was called
+        verify(appointmentDao).listAppointments();
     }
+    
+    
 
     @Test
+    @DisplayName("Should update appointment successfully")
     public void testUpdateAppointment_Success() throws IOException {
-        when(ReadValues.readDate(anyString())).thenReturn(new Date());
-        when(ReadValues.readMenuOption(anyString(), 0,anyInt())).thenReturn(1);
-        doNothing().when(appointmentDao);
-        AppointmentDao.updateAppointment(any(Appointment.class));
+        try (MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class)) {
+            readValuesMock.when(() -> ReadValues.readDate(anyString())).thenReturn(new Date());
+            readValuesMock.when(() -> ReadValues.readMenuOption(anyString(), anyInt(), anyInt())).thenReturn(1);
 
-        appointmentService.updateAppointment();
+            doNothing().when(appointmentDao).updateAppointment(any(Appointment.class));
 
-        verify(appointmentDao);
-        AppointmentDao.updateAppointment(testAppointment);
+            appointmentService.updateAppointment();
+
+            verify(appointmentDao).updateAppointment(any(Appointment.class));
+        }
     }
 }

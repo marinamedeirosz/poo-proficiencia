@@ -1,5 +1,7 @@
 package com.marina.utils;
 
+import com.marina.exception.InvalidCpfException;
+
 public class Validator {
     public static boolean isValidCpf(String cpf) {
         try {
@@ -32,7 +34,7 @@ public class Validator {
             }
 
             return cpf.charAt(9) == (char) ('0' + firstDigit) && cpf.charAt(10) == (char) ('0' + secondDigit);
-        } catch (Exception e) {
+        } catch (InvalidCpfException e) {
             System.out.println("Erro ao validar CPF: " + e.getMessage());
             return false;
         }

@@ -3,52 +3,54 @@ package com.marina.services;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.marina.dao.AuthDao;
+import com.marina.dao.impl.AuthDaoImpl;
 import com.marina.utils.ReadValues;
 
 class AuthServiceTest {
-    private final AuthService authService = new AuthService();
+
+    private AuthDaoImpl authDaoImplMock;
+    private AuthService authService;
+
+    @BeforeEach
+    void setUp() {
+        authDaoImplMock = mock(AuthDaoImpl.class);
+        authService = new AuthService(authDaoImplMock);
+    }
 
     @Test
     @DisplayName("Should login successfully with valid credentials")
     void loginSuccessfully() throws IOException {
-        try (MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class);
-             MockedStatic<AuthDao> authDaoMock = mockStatic(AuthDao.class)) {
+        when(ReadValues.readString("Digite o login: ")).thenReturn("m.medeiros");
+        when(ReadValues.readString("Digite a senha: ")).thenReturn("123");
 
-            readValuesMock.when(() -> ReadValues.readString("Digite o login: ")).thenReturn("m.medeiros");
-            readValuesMock.when(() -> ReadValues.readString("Digite a senha: ")).thenReturn("123");
-            authDaoMock.when(() -> AuthDao.login("m.medeiros", "123")).thenReturn("Autenticado com sucesso.");
+        when(authDaoImplMock.login("m.medeiros", "123")).thenReturn("Autenticado com sucesso.");
 
-            String result = authService.login();
+        String result = authService.login();
 
-            assertEquals("Autenticado com sucesso.", result);
-            readValuesMock.verify(() -> ReadValues.readString("Digite o login: "));
-            readValuesMock.verify(() -> ReadValues.readString("Digite a senha: "));
-            authDaoMock.verify(() -> AuthDao.login("m.medeiros", "123"));
-        }
+        assertEquals("Autenticado com sucesso.", result);
+
+        verify(authDaoImplMock).login("m.medeiros", "123");
     }
 
     @Test
     @DisplayName("Should register successfully with valid credentials")
     void registerSuccessfully() throws IOException {
-        try (MockedStatic<ReadValues> readValuesMock = mockStatic(ReadValues.class);
-             MockedStatic<AuthDao> authDaoMock = mockStatic(AuthDao.class)) {
+        when(ReadValues.readString("Digite o login: ")).thenReturn("newuser");
+        when(ReadValues.readString("Digite a senha: ")).thenReturn("newpass");
 
-            readValuesMock.when(() -> ReadValues.readString("Digite o login: ")).thenReturn("newuser");
-            readValuesMock.when(() -> ReadValues.readString("Digite a senha: ")).thenReturn("newpass");
-            authDaoMock.when(() -> AuthDao.register("newuser", "newpass")).thenReturn("Usuário criado com sucesso!");
+        when(authDaoImplMock.register("newuser", "newpass")).thenReturn("Usuário criado com sucesso!");
 
-            String result = authService.register();
+        String result = authService.register();
 
-            assertEquals("Usuário criado com sucesso!", result);
-            readValuesMock.verify(() -> ReadValues.readString("Digite o login: "));
-            readValuesMock.verify(() -> ReadValues.readString("Digite a senha: "));
-            authDaoMock.verify(() -> AuthDao.register("newuser", "newpass"));
-        }
+        assertEquals("Usuário criado com sucesso!", result);
+
+        verify(authDaoImplMock).register("newuser", "newpass");
     }
 }

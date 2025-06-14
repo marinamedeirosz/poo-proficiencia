@@ -26,6 +26,10 @@ public class Doctor extends Person {
         this.crm = crm;
     }
 
+    public String getSpecialties() {
+        return specialties; 
+    }
+
     @Override
     public String getDetails() {
         return "Médico: " + getName() + "\n" +
@@ -33,7 +37,7 @@ public class Doctor extends Person {
                "Telefone: " + Formatter.formatPhone(getPhone()) + "\n" +
                "CRM: " + Formatter.formatCrm(crm) + "\n" +
                "Situação: " + getStatus().getText() + "\n" +
-               "Especialidades: " + specialties;
+               "Especialidades: " + getSpecialties();
     }
     
     @Override

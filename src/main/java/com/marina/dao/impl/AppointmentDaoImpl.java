@@ -1,6 +1,10 @@
 package com.marina.dao.impl;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import com.marina.dao.ConnectionDao;
 import com.marina.dao.interfaces.AppointmentDao;
@@ -9,13 +13,23 @@ import com.marina.model.Appointment;
 public class AppointmentDaoImpl implements AppointmentDao {
     private static final String ENDPOINT = "consulta";
 
+    private static final String DATE_PATTERN = "dd/MM/yyyy HH:mm:ss";
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
     @Override
     public String createAppointment(Appointment appointment) throws IOException {
+        LocalDateTime date = appointment.getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
         String jsonData = "{"
-                + "\"doctorCpf\": \"" + appointment.getDoctor() + "\","
+                + "\"doctorCrm\": \"" + appointment.getDoctor() + "\","
                 + "\"patientCpf\": \"" + appointment.getPatient() + "\","
-                + "\"date\": \"" + appointment.getDate() + "\""
+                + "\"appointmentDate\": \"" + formatter.format(date) + "\","
+                + "\"status\": \"" + appointment.getStatus().getCode() + "\","
+                + "\"observation\": \"" + appointment.getObservation() + "\""
                 + "}";
+
         return ConnectionDao.makePostRequest(ENDPOINT, jsonData);
     }
 

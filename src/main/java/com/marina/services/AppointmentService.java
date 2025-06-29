@@ -3,6 +3,7 @@ package com.marina.services;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.marina.dao.interfaces.AppointmentDao;
 import com.marina.enums.AppointmentStatus;
@@ -36,11 +37,12 @@ public class AppointmentService {
 
         while (true) {
             String tempCrm = ReadValues.readCrm("Digite o CRM do médico: ");
-            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm)) && 
-                doctors.stream().anyMatch(d -> d.getStatus() == Status.ATIVO)) {
+
+            if (doctors.stream().anyMatch(d -> d.getCrm().equals(tempCrm) && d.getStatus() == Status.ATIVO)) {
                 doctorCrm = tempCrm;
                 break;
             }
+
             System.out.println("CRM inválido. Escolha um médico válido e ativo.");
         }
 
@@ -49,25 +51,40 @@ public class AppointmentService {
 
         while (true) {
             String tempCpf = ReadValues.readCpf("Digite o CPF do paciente: ");
-            if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf)) && 
-                patients.stream().anyMatch(p -> p.getStatus() == Status.ATIVO)) {
+
+            if (patients.stream().anyMatch(p -> p.getCpf().equals(tempCpf) && p.getStatus() == Status.ATIVO)) {
                 patientCpf = tempCpf;
+
                 break;
             }
+
             System.out.println("CPF inválido. Escolha um paciente válido e ativo.");
         }
 
         AppointmentStatus status = ReadValues.readAppointmentStatus("Digite o status da consulta (A - agendada, C - cancelada, R - realizada): ");
 
         while (true) {
-            appointmentDate = ReadValues.readDate("Digite a data da consulta: ");
-            if (status == AppointmentStatus.CANCELADA || status == AppointmentStatus.REALIZADA) {
+            appointmentDate = ReadValues.readDate("Digite a data e hora da consulta (DD/MM/YYYY HH:mm): ");
+
+            if (status == AppointmentStatus.CANCELADA) {
                 break;
             }
-            if (appointmentDate.after(new Date())) {
-                break;
+
+            if (status == AppointmentStatus.REALIZADA) {
+                if (appointmentDate.before(new Date())) {
+                    break;
+                } else {
+                    System.out.println("A realização da consulta deve ser uma data passada.");
+                }
             }
-            System.out.println("Data inválida. Para consultas agendadas, escolha uma data futura.");
+
+            if (status == AppointmentStatus.AGENDADA) {
+                if (appointmentDate.after(new Date())) {
+                    break;
+                }
+
+                System.out.println("Data inválida. Para consultas agendadas, escolha uma data futura.");
+            }
         }
 
         String observation = ReadValues.readString("Digite a observação da consulta: ");
@@ -120,7 +137,9 @@ public class AppointmentService {
         appointment.setStatus(status);
         try {
             Style.printLine(50);
+
             System.out.println(appointmentDao.updateAppointment(appointment));
+
             Style.printLine(50);
         } catch (IOException e) {
             throw new IOException("Erro ao atualizar consulta: " + e.getMessage());
@@ -130,8 +149,8 @@ public class AppointmentService {
     public List<Appointment> listAppointments() throws IOException {
         try {
             String json = appointmentDao.listAppointments();
-            List<Appointment> appointments = JsonParser.parseJson(json, Appointment.class);
-            return appointments;
+
+            return JsonParser.parseJson(json, Appointment.class);
         } catch (IOException e) {
             throw new IOException("Erro ao listar consultas: " + e.getMessage());
         }
@@ -143,6 +162,7 @@ public class AppointmentService {
 
             if (appointments.isEmpty()) {
                 System.out.println("Não existem consultas cadastradas.");
+
                 return;
             }
             

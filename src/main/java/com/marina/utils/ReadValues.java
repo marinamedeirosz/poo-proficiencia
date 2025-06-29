@@ -87,27 +87,33 @@ public class ReadValues {
     public static Status readStatus(String message) {
         while (true) {
             String status = readString(message);
-            if (status.equals("A") || status.equals("a")) {
+
+            if (status.equalsIgnoreCase("A")) {
                 return Status.ATIVO;
             }
-            if (status.equals("I") || status.equals("i")) {
+
+            if (status.equalsIgnoreCase("I")) {
                 return Status.INATIVO;
             }
+
             Style.printLine(50);
             System.out.println("Status inválido. Tente novamente. Formato: A para ativo ou I para inativo");
             Style.printLine(50);
-        }   
+        }
     }
 
     public static YesOrNo readYesNo(String message) {
         while (true) {
             String yesNo = readString(message);
-            if (yesNo.equals("S") || yesNo.equals("s")) {
+
+            if (yesNo.equalsIgnoreCase("S")) {
                 return YesOrNo.SIM;
             }
-            if (yesNo.equals("N") || yesNo.equals("n")) {
+
+            if (yesNo.equalsIgnoreCase("N")) {
                 return YesOrNo.NAO;
             }
+
             Style.printLine(50);
             System.out.println("Opção inválida. Tente novamente. Formato: S para sim ou N para não");
             Style.printLine(50);
@@ -117,12 +123,15 @@ public class ReadValues {
     public static Profile readProfile(String message) {
         while (true) {
             String profile = readString(message);
-            if (profile.equals("P") || profile.equals("p")) {
+
+            if (profile.equalsIgnoreCase("P")) {
                 return Profile.PACIENTE;
             }
-            if (profile.equals("M") || profile.equals("m")) {
+
+            if (profile.equalsIgnoreCase("M")) {
                 return Profile.MEDICO;
             }
+
             Style.printLine(50);
             System.out.println("Perfil inválido. Tente novamente. Formato: P para paciente ou M para médico");
             Style.printLine(50);
@@ -132,15 +141,19 @@ public class ReadValues {
     public static AppointmentStatus readAppointmentStatus(String message) {
         while (true) {
             String appointmentStatus = readString(message);
-            if (appointmentStatus.equals("A") || appointmentStatus.equals("a")) {
+
+            if (appointmentStatus.equalsIgnoreCase("A")) {
                 return AppointmentStatus.AGENDADA;
-            }   
-            if (appointmentStatus.equals("C") || appointmentStatus.equals("c")) {
+            }
+
+            if (appointmentStatus.equalsIgnoreCase("C")) {
                 return AppointmentStatus.CANCELADA;
-            }   
-            if (appointmentStatus.equals("R") || appointmentStatus.equals("r")) {
+            }
+
+            if (appointmentStatus.equalsIgnoreCase("R")) {
                 return AppointmentStatus.REALIZADA;
             }
+
             Style.printLine(50);
             System.out.println("Status da consulta inválido. Tente novamente. Formato: A para agendada ou C para cancelada ou R para realizada");
             Style.printLine(50);
@@ -150,11 +163,15 @@ public class ReadValues {
     public static String readName(String message) {
         while (true) {
             String name = readString(message).trim();
+
             if (name.matches("[\\p{L}\\s]+") && name.split("\\s+").length >= 2) {
                 return name;
             }
+
             Style.printLine(50);
+
             System.out.println("Nome inválido. Tente novamente. Formato: Nome completo (mínimo dois nomes).");
+
             Style.printLine(50);
         }
     }
@@ -162,10 +179,13 @@ public class ReadValues {
     public static int readMenuOption(String message, int min, int max) {
         while (true) {
             int option = readInt(message);
+
             if (option >= min && option <= max) {
                 Style.printLine(50);
+
                 return option;
             }
+
             Style.printLine(50);
             System.out.println("Opção inválida. Digite um número entre " + min + " e " + max + ".");
             Style.printLine(50);

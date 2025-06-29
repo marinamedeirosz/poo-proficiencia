@@ -38,10 +38,11 @@ public enum Status {
     @JsonCreator
     public static Status fromValue(String value) {
         for (Status status : Status.values()) {
-            if (status.code.equals(value)) {
+            if (status.code.equalsIgnoreCase(value)) {
                 return status;
             }
         }
+
         throw new InvalidStatusException(value);
     }
 }

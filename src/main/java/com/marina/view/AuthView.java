@@ -17,8 +17,8 @@ public class AuthView {
     private static final AuthService authService = new AuthService(new AuthDaoImpl());
 
     private static final IMenuOption[] METHODS = {
-        () -> authService.login(),
-        () -> authService.register(),
+            authService::login,
+            authService::register,
         () -> {
             System.exit(0);
         return null;

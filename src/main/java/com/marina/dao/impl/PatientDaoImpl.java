@@ -23,11 +23,6 @@ public class PatientDaoImpl implements PatientDao {
     }
 
     @Override
-    public String getPatient(String cpf) throws IOException {
-        return ConnectionDao.makeGetRequest(ENDPOINT + "/" + cpf);
-    }
-
-    @Override
     public void updatePatient(Patient patient) throws IOException {
         String jsonData = "{"
                 + "\"name\": \"" + patient.getName() + "\","

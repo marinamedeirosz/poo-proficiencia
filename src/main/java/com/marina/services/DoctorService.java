@@ -41,16 +41,6 @@ public class DoctorService {
         }
     }
 
-    public void getDoctor() throws IOException {
-        String crm = ReadValues.readCrm("Digite o CRM do médico: ");
-        try {
-            String json = doctorDao.getDoctor(crm);
-            System.out.println(json);
-        } catch (IOException e) {
-            throw new IOException("Erro ao buscar médico: " + e.getMessage());
-        }
-    }
-
     public void listDoctorsView() throws IOException {
         try {
             String json = doctorDao.listDoctors();

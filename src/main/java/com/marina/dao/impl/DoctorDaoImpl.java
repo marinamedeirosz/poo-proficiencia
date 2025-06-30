@@ -25,23 +25,6 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public String getDoctor(String cpf) throws IOException {
-        return ConnectionDao.makeGetRequest(ENDPOINT + "/" + cpf);
-    }
-
-    @Override
-    public void updateDoctor(Doctor doc) throws IOException {
-        String jsonData = "{"
-                + "\"name\": \"" + doc.getName() + "\","
-                + "\"phone\": \"" + doc.getPhone() + "\","
-                + "\"status\": \"" + doc.getStatus().toString() + "\","
-                + "\"userAutomation\": \"" + doc.getUserAutomation().toString() + "\","
-                + "\"crm\": \"" + doc.getCrm() + "\""
-                + "}";
-        ConnectionDao.makePutRequest(ENDPOINT + "/" + doc.getCpf(), jsonData);
-    }
-
-    @Override
     public void deleteDoctor(String cpf) throws IOException {
         ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + cpf);
     }

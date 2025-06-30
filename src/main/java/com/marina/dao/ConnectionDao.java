@@ -21,9 +21,14 @@ public class ConnectionDao {
 
     private static HttpURLConnection setupConnection(String endpoint, String method) throws IOException {
         URL url = new URL(BASE_URL + endpoint);
+
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(method);
-        connection.setRequestProperty("Content-Type", "application/json");
+
+        if (!method.equalsIgnoreCase("DELETE")) {
+            connection.setRequestProperty("Content-Type", "application/json");
+        }
+
         connection.setConnectTimeout(CONNECTION_TIMEOUT);
         connection.setReadTimeout(READ_TIMEOUT);
         return connection;

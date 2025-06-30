@@ -49,11 +49,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public void deleteAppointment(String id) throws IOException {
-        ConnectionDao.makeDeleteRequest(ENDPOINT + "/" + id);
-    }
-
-    @Override
     public String listAppointments() throws IOException {
         return ConnectionDao.makeGetRequest(ENDPOINT);
     }

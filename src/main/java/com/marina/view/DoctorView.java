@@ -17,8 +17,7 @@ public class DoctorView {
         "[1] - Cadastrar Médico",
         "[2] - Listar Médicos",
         "[3] - Adicionar Especialidade",
-        "[4] - Listar Especialidades",
-        "[5] - Voltar"
+        "[4] - Voltar"
     };
 
     private static final DoctorService doctorService = new DoctorService(new DoctorDaoImpl(), new SpecialtyService(new SpecialtyDaoImpl()));
@@ -27,7 +26,6 @@ public class DoctorView {
         () -> doctorService.createDoctor(),
         () -> doctorService.listDoctorsView(),
         () -> doctorService.addSpecialty(),
-        () -> doctorService.listSpecialtiesView(),
         () -> showMenu()
     };
 

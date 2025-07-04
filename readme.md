@@ -17,7 +17,7 @@ Projeto apresentado como requisito para dispensa na disciplina.
 * Utilizar ao menos 2 padrões de projeto e explicar onde está sendo aplicado;
     * [Singleton](./src/main/java/com/marina/config/AppConfig.java);
     * [Factory](./src/main/java/com/marina/factory/PersonFactory.java);
-* Uso de banco de dados (insert, update, delete, select);
+* Uso de banco de dados;
 * Estruturação do projeto em camadas (View, BO, VO, DAO);
 * [Uso de exceções (deve-se cria exceções próprias e tratá-las corretamente)](./src/main/java/com/marina/exception);
 
